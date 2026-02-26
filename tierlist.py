@@ -1,41 +1,77 @@
 class TierList:
     def __init__(self, niveaux=None):
-        # Définition des niveaux par défaut si rien n'est fourni
+        """
+        Initialise la tier list avec des niveaux prédéfinis.
+        Par défaut : S, A, B, C, D.
+        """
         if niveaux is None:
             niveaux = ["S", "A", "B", "C", "D"]
         self.tiers = {niveau: [] for niveau in niveaux}
 
     def ajouter(self, niveau, element):
-        """Ajoute un élément dans un niveau donné."""
+        """
+        Ajoute un élément dans un niveau donné.
+        """
         if niveau in self.tiers:
             self.tiers[niveau].append(element)
         else:
             print(f"Niveau inconnu : {niveau}")
 
     def retirer(self, niveau, element):
-        """Retire un élément d'un niveau donné."""
+        """
+        Retire un élément d'un niveau donné.
+        """
         if niveau in self.tiers and element in self.tiers[niveau]:
             self.tiers[niveau].remove(element)
         else:
             print("Impossible de retirer cet élément.")
 
     def afficher(self):
-        """Affiche la tier list."""
+        """
+        Affiche la tier list dans la console.
+        """
         print("\n--- TIER LIST ---")
         for niveau, elements in self.tiers.items():
             print(f"{niveau}: {elements}")
         print("-----------------\n")
 
     def niveaux_disponibles(self):
-        """Retourne la liste des niveaux existants."""
+        """
+        Retourne la liste des niveaux existants.
+        """
         return list(self.tiers.keys())
+
+    def sauvegarder(self, nom_fichier="tierlist_carte.txt"):
+        """
+        Sauvegarde la tier list dans un fichier texte formaté.
+        Le fichier devient une "carte pro" propre et lisible.
+        """
+        with open(nom_fichier, "w", encoding="utf-8") as f:
+            f.write("=== TIER LIST ===\n\n")
+
+            # Contenu de la tier list
+            for niveau, elements in self.tiers.items():
+                f.write(f"{niveau} :\n")
+                if elements:
+                    for elem in elements:
+                        f.write(f"  - {elem}\n")
+                else:
+                    f.write("  (vide)\n")
+                f.write("\n")
+
+            f.write("==================\n")
+
+        print(f"Tier list enregistrée dans : {nom_fichier}\n")
 
 
 # ---------------------------------------------------------
-# MENU INTERACTIF (s'exécute quand double-cliques)
+# MENU INTERACTIF
 # ---------------------------------------------------------
 
 def menu():
+    """
+    Menu interactif permettant de gérer la tier list.
+    """
     tl = TierList()
 
     while True:
@@ -44,7 +80,8 @@ def menu():
         print("2. Ajouter un élément")
         print("3. Retirer un élément")
         print("4. Voir les niveaux disponibles")
-        print("5. Quitter")
+        print("5. Sauvegarder la tier list")
+        print("6. Quitter")
 
         choix = input("Choix : ")
 
@@ -62,9 +99,21 @@ def menu():
             tl.retirer(niveau, element)
 
         elif choix == "4":
-            print("Niveaux :", tl.niveaux_disponibles())
+            print("Niveaux :", tl.niveaux_disponibles(), "\n")
 
         elif choix == "5":
+            # L'utilisateur choisit s'il veut sauvegarder ou non
+            confirmation = input("Enregistrer la tier list ? (o/n) : ").lower()
+            if confirmation == "o":
+                nom = input("Nom du fichier (laisser vide pour défaut) : ")
+                if nom.strip() == "":
+                    tl.sauvegarder()
+                else:
+                    tl.sauvegarder(nom)
+            else:
+                print("Sauvegarde annulée.\n")
+
+        elif choix == "6":
             print("Fermeture du programme.")
             break
 
@@ -72,6 +121,6 @@ def menu():
             print("Choix invalide.\n")
 
 
-# Lance automatiquement le menu si on double-clique sur le fichier
+# Lancement automatique du menu si le fichier est exécuté directement
 if __name__ == "__main__":
     menu()
