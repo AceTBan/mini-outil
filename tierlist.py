@@ -41,15 +41,30 @@ class TierList:
         """
         return list(self.tiers.keys())
 
+    def modifier_niveau(self, ancien, nouveau):
+        """
+        Renomme un niveau existant.
+        Conserve les éléments associés.
+        """
+        if ancien not in self.tiers:
+            print("Niveau introuvable.")
+            return
+
+        if nouveau in self.tiers:
+            print("Ce nom existe déjà.")
+            return
+
+        # On déplace les éléments vers le nouveau nom
+        self.tiers[nouveau] = self.tiers.pop(ancien)
+        print(f"Niveau '{ancien}' renommé en '{nouveau}'.")
+
     def sauvegarder(self, nom_fichier="tierlist_carte.txt"):
         """
         Sauvegarde la tier list dans un fichier texte formaté.
-        Le fichier devient une "carte pro" propre et lisible.
         """
         with open(nom_fichier, "w", encoding="utf-8") as f:
             f.write("=== TIER LIST ===\n\n")
 
-            # Contenu de la tier list
             for niveau, elements in self.tiers.items():
                 f.write(f"{niveau} :\n")
                 if elements:
@@ -79,9 +94,10 @@ def menu():
         print("1. Afficher la tier list")
         print("2. Ajouter un élément")
         print("3. Retirer un élément")
-        print("4. Voir les niveaux disponibles")
-        print("5. Sauvegarder la tier list")
-        print("6. Quitter")
+        print("4. Modifier un niveau")
+        print("5. Voir les niveaux disponibles")
+        print("6. Sauvegarder la tier list")
+        print("7. Quitter")
 
         choix = input("Choix : ")
 
@@ -99,10 +115,14 @@ def menu():
             tl.retirer(niveau, element)
 
         elif choix == "4":
-            print("Niveaux :", tl.niveaux_disponibles(), "\n")
+            ancien = input("Nom du niveau à modifier : ")
+            nouveau = input("Nouveau nom : ")
+            tl.modifier_niveau(ancien, nouveau)
 
         elif choix == "5":
-            # L'utilisateur choisit s'il veut sauvegarder ou non
+            print("Niveaux :", tl.niveaux_disponibles(), "\n")
+
+        elif choix == "6":
             confirmation = input("Enregistrer la tier list ? (o/n) : ").lower()
             if confirmation == "o":
                 nom = input("Nom du fichier (laisser vide pour défaut) : ")
@@ -113,7 +133,7 @@ def menu():
             else:
                 print("Sauvegarde annulée.\n")
 
-        elif choix == "6":
+        elif choix == "7":
             print("Fermeture du programme.")
             break
 
