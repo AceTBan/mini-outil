@@ -1,52 +1,58 @@
 import random
 
-# Liste des options disponibles dans la roue
+# Chaque option est stockée sous forme de dictionnaire :
+# {"nom": "Option 1", "poids": 1}
 options = [
-    "Option 1",
-    "Option 2"
+    {"nom": "Option 1", "poids": 1},
+    {"nom": "Option 2", "poids": 1}
 ]
 
-# Historique des résultats tirés par la roue
 historique = []
 
 
 def tourner():
     """
-    Tire une option aléatoire dans la liste.
-    Le résultat est ajouté à l'historique.
+    Tire une option en tenant compte des poids.
+    Une option avec un poids plus élevé a plus de chances d'être choisie.
     """
-    resultat = random.choice(options)
-    historique.append(resultat) # On garde une trace du tirage
+    # On crée une liste où chaque option apparaît autant de fois que son poids
+    pool = []
+    for opt in options:
+        pool.extend([opt["nom"]] * opt["poids"])
+
+    resultat = random.choice(pool)
+    historique.append(resultat)
     return resultat
 
 
 def afficher_options():
     """
-    Affiche toutes les options disponibles dans la roue.
+    Affiche les options avec leurs poids.
     """
     print("\n--- OPTIONS ---")
     for i, opt in enumerate(options, start=1):
-        print(f"{i}. {opt}")
+        print(f"{i}. {opt['nom']} (poids : {opt['poids']})")
     print("----------------\n")
 
 
-def ajouter_option(option):
+def ajouter_option(nom, poids=1):
     """
-    Ajoute une nouvelle option à la roue.
+    Ajoute une option avec un poids (par défaut 1).
     """
-    options.append(option)
-    print(f"Option ajoutée : {option}")
+    options.append({"nom": nom, "poids": poids})
+    print(f"Option ajoutée : {nom} (poids : {poids})")
 
 
-def supprimer_option(option):
+def modifier_poids(nom, nouveau_poids):
     """
-    Supprime une option de la roue si elle existe.
+    Modifie le poids d'une option existante.
     """
-    if option in options:
-        options.remove(option)
-        print(f"Option supprimée : {option}")
-    else:
-        print("Cette option n'existe pas.")
+    for opt in options:
+        if opt["nom"] == nom:
+            opt["poids"] = nouveau_poids
+            print(f"Poids modifié : {nom} → {nouveau_poids}")
+            return
+    print("Option introuvable.")
 
 
 def afficher_historique():
@@ -62,40 +68,43 @@ def afficher_historique():
     print("--------------------------------\n")
 
 
-# ---------------------------------------------------------
-# MENU INTERACTIF
-# ---------------------------------------------------------
-
 def menu():
     """
-    Menu interactif permettant d'utiliser la roue.
+    Menu interactif pour utiliser la roue.
     """
     while True:
         print("=== ROUE ALEATOIRE ===")
         print("1. Tourner la roue")
         print("2. Afficher les options")
         print("3. Ajouter une option")
-        print("4. Supprimer une option")
-        print("5. Voir l'historique des tirages")
+        print("4. Modifier le poids d'une option")
+        print("5. Voir l'historique")
         print("6. Quitter")
 
         choix = input("Choix : ")
 
         if choix == "1":
-            resultat = tourner()
-            print(f"\nRésultat : {resultat}\n")
+            print(f"\nRésultat : {tourner()}\n")
 
         elif choix == "2":
             afficher_options()
 
         elif choix == "3":
-            nouvelle = input("Nouvelle option : ")
-            ajouter_option(nouvelle)
+            nom = input("Nom de l'option : ")
+            try:
+                poids = int(input("Poids (nombre entier) : "))
+            except ValueError:
+                poids = 1
+            ajouter_option(nom, poids)
 
         elif choix == "4":
-            afficher_options()
-            cible = input("Option à supprimer : ")
-            supprimer_option(cible)
+            nom = input("Option à modifier : ")
+            try:
+                nouveau = int(input("Nouveau poids : "))
+            except ValueError:
+                print("Poids invalide.")
+                continue
+            modifier_poids(nom, nouveau)
 
         elif choix == "5":
             afficher_historique()
@@ -108,6 +117,5 @@ def menu():
             print("Choix invalide.\n")
 
 
-# Lancement automatique si double-clic
 if __name__ == "__main__":
     menu()
