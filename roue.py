@@ -1,4 +1,6 @@
 import random
+import time
+import os
 
 # Chaque option est stockée sous forme de dictionnaire :
 # {"nom": "Option 1", "poids": 1}
@@ -10,12 +12,27 @@ options = [
 historique = []
 
 
+def animation():
+    """
+    Petite animation ASCII pour simuler la roue qui tourne.
+    Purement visuel, ne change pas le résultat.
+    """
+    frames = ["|", "/", "-", "\\"]
+    for _ in range(10):  # Nombre de rotations
+        for frame in frames:
+            print(f"\rLa roue tourne... {frame}", end="")
+            time.sleep(0.08)
+    print("\r" + " " * 30, end="\r")  # Efface la ligne
+
+
 def tourner():
     """
     Tire une option en tenant compte des poids.
-    Une option avec un poids plus élevé a plus de chances d'être choisie.
+    Affiche une animation avant de révéler le résultat.
     """
-    # On crée une liste où chaque option apparaît autant de fois que son poids
+    animation()  # On lance l'animation avant le tirage
+
+    # Création d'une "pool" pondérée
     pool = []
     for opt in options:
         pool.extend([opt["nom"]] * opt["poids"])
