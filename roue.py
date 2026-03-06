@@ -84,6 +84,12 @@ def afficher_historique():
         print("Aucun tirage pour le moment.")
     print("--------------------------------\n")
 
+def reset_historique():
+    """
+    Réinitialise complètement l'historique des tirages.
+    """
+    historique.clear()
+    print("Historique réinitialisé.")
 
 def menu():
     """
@@ -96,7 +102,8 @@ def menu():
         print("3. Ajouter une option")
         print("4. Modifier le poids d'une option")
         print("5. Voir l'historique")
-        print("6. Quitter")
+        print("6. Réinitialiser l'historique")
+        print("7. Quitter")
 
         choix = input("Choix : ")
 
@@ -127,6 +134,9 @@ def menu():
             afficher_historique()
 
         elif choix == "6":
+            reset_historique()
+
+        elif choix == "7":
             print("Fermeture du programme.")
             break
 
