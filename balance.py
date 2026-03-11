@@ -7,17 +7,35 @@ def afficher_balance():
     """
     Affiche simplement les listes POUR et CONTRE.
     """
+    print("\n--- BALANCE ---")
     print("POUR :", pour)
     print("CONTRE :", contre)
+    print("----------------\n")
 
 
 # ---------------------------------------------------------
-# Petit bloc pour exécuter quelque chose quand on double-clique
+# Programme principal (s'exécute quand on double-clique)
 # ---------------------------------------------------------
 
 if __name__ == "__main__":
-    # On affiche la balance au lancement
+    # On demande un argument à l'utilisateur
+    argument = input("Écris ton argument : ")
+
+    # On demande où le placer
+    choix = input("Le mettre dans POUR ou CONTRE ? (p/c) : ").lower()
+
+    if choix == "p":
+        pour.append(argument)
+        print("\nAjouté dans POUR.")
+    elif choix == "c":
+        contre.append(argument)
+        print("\nAjouté dans CONTRE.")
+    else:
+        print("\nChoix invalide, rien n'a été ajouté.")
+
+    # On affiche le résultat
     afficher_balance()
 
-    # On empêche la fenêtre de se fermer immédiatement
-    input("\nAppuie sur Entrée pour fermer...")
+    # Empêche la fenêtre de se fermer immédiatement
+    input("Appuie sur Entrée pour fermer...")
+    
