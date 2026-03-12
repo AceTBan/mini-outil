@@ -18,24 +18,31 @@ def afficher_balance():
 # ---------------------------------------------------------
 
 if __name__ == "__main__":
-    # On demande un argument à l'utilisateur
-    argument = input("Écris ton argument : ")
 
-    # On demande où le placer
-    choix = input("Le mettre dans POUR ou CONTRE ? (p/c) : ").lower()
+    while True:
+        # On demande un argument
+        argument = input("Écris ton argument (ou tape 'quit' pour fermer) : ")
 
-    if choix == "p":
-        pour.append(argument)
-        print("\nAjouté dans POUR.")
-    elif choix == "c":
-        contre.append(argument)
-        print("\nAjouté dans CONTRE.")
-    else:
-        print("\nChoix invalide, rien n'a été ajouté.")
+        # Option pour quitter
+        if argument.lower() == "quit":
+            break
 
-    # On affiche le résultat
-    afficher_balance()
+        # On demande où le mettre
+        choix = input("Le mettre dans POUR ou CONTRE ? (p/c) : ").lower()
+
+        if choix == "p":
+            pour.append(argument)
+            print("Ajouté dans POUR.\n")
+
+        elif choix == "c":
+            contre.append(argument)
+            print("Ajouté dans CONTRE.\n")
+
+        else:
+            print("Choix invalide, rien ajouté.\n")
+
+        # On affiche la balance après chaque ajout
+        afficher_balance()
 
     # Empêche la fenêtre de se fermer immédiatement
     input("Appuie sur Entrée pour fermer...")
-    
