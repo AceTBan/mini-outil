@@ -21,11 +21,16 @@ if __name__ == "__main__":
 
     while True:
         # On demande un argument
-        argument = input("Écris ton argument (ou tape 'quit' pour fermer) : ")
+        argument = input("Écris ton argument (ou 'show' pour afficher, 'quit' pour fermer) : ")
 
         # Option pour quitter
         if argument.lower() == "quit":
             break
+
+        # Option pour afficher la balance sans ajouter
+        if argument.lower() == "show":
+            afficher_balance()
+            continue
 
         # On demande où le mettre
         choix = input("Le mettre dans POUR ou CONTRE ? (p/c) : ").lower()
