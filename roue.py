@@ -4,10 +4,7 @@ import os
 
 # Chaque option est stockée sous forme de dictionnaire :
 # {"nom": "Option 1", "poids": 1}
-options = [
-    {"nom": "Option 1", "poids": 1},
-    {"nom": "Option 2", "poids": 1}
-]
+options = [{"nom": "Option 1", "poids": 1}, {"nom": "Option 2", "poids": 1}]
 
 historique = []
 
@@ -84,12 +81,14 @@ def afficher_historique():
         print("Aucun tirage pour le moment.")
     print("--------------------------------\n")
 
+
 def reset_historique():
     """
     Réinitialise complètement l'historique des tirages.
     """
     historique.clear()
     print("Historique réinitialisé.")
+
 
 def menu():
     """
