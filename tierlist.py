@@ -83,6 +83,7 @@ class TierList:
 # MENU INTERACTIF
 # ---------------------------------------------------------
 
+
 def menu():
     """
     Menu interactif permettant de gérer la tier list.
