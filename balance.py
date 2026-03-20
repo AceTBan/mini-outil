@@ -21,7 +21,9 @@ if __name__ == "__main__":
 
     while True:
         # On demande un argument
-        argument = input("Écris ton argument (ou 'show' pour afficher, 'quit' pour fermer) : ")
+        argument = input(
+            "Écris ton argument (ou 'show' pour afficher, 'quit' pour fermer) : "
+        )
 
         # Option pour quitter
         if argument.lower() == "quit":
