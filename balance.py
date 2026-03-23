@@ -13,6 +13,26 @@ def afficher_balance():
     print("----------------\n")
 
 
+def supprimer_argument():
+    """
+    Supprime un argument présent dans l'une des deux listes.
+    """
+    afficher_balance()
+    cible = input("Argument à supprimer : ")
+
+    if cible in pour:
+        pour.remove(cible)
+        print("Supprimé de POUR.\n")
+        return
+
+    if cible in contre:
+        contre.remove(cible)
+        print("Supprimé de CONTRE.\n")
+        return
+
+    print("Argument introuvable.\n")
+
+
 # ---------------------------------------------------------
 # Programme principal (s'exécute quand on double-clique)
 # ---------------------------------------------------------
@@ -22,7 +42,7 @@ if __name__ == "__main__":
     while True:
         # On demande un argument
         argument = input(
-            "Écris ton argument (ou 'show' pour afficher, 'quit' pour fermer) : "
+            "Écris ton argument (ou 'show' pour afficher, 'del' pour supprimer, 'quit' pour fermer) : "
         )
 
         # Option pour quitter
@@ -32,6 +52,11 @@ if __name__ == "__main__":
         # Option pour afficher la balance sans ajouter
         if argument.lower() == "show":
             afficher_balance()
+            continue
+
+        # Option pour supprimer un argument
+        if argument.lower() == "del":
+            supprimer_argument()
             continue
 
         # On demande où le mettre
