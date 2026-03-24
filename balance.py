@@ -33,6 +33,28 @@ def supprimer_argument():
     print("Argument introuvable.\n")
 
 
+def deplacer_argument():
+    """
+    Déplace un argument de POUR vers CONTRE ou inversement.
+    """
+    afficher_balance()
+    cible = input("Argument à déplacer : ")
+
+    if cible in pour:
+        pour.remove(cible)
+        contre.append(cible)
+        print("Déplacé de POUR vers CONTRE.\n")
+        return
+
+    if cible in contre:
+        contre.remove(cible)
+        pour.append(cible)
+        print("Déplacé de CONTRE vers POUR.\n")
+        return
+
+    print("Argument introuvable.\n")
+
+
 # ---------------------------------------------------------
 # Programme principal (s'exécute quand on double-clique)
 # ---------------------------------------------------------
@@ -42,7 +64,7 @@ if __name__ == "__main__":
     while True:
         # On demande un argument
         argument = input(
-            "Écris ton argument (ou 'show' pour afficher, 'del' pour supprimer, 'quit' pour fermer) : "
+            "Écris ton argument (ou 'show' pour afficher, 'del' pour supprimer, 'move' pour déplacer, 'quit' pour fermer) : "
         )
 
         # Option pour quitter
@@ -57,6 +79,11 @@ if __name__ == "__main__":
         # Option pour supprimer un argument
         if argument.lower() == "del":
             supprimer_argument()
+            continue
+
+        # Option pour déplacer un argument
+        if argument.lower() == "move":
+            deplacer_argument()
             continue
 
         # On demande où le mettre
