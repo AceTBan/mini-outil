@@ -55,6 +55,15 @@ def deplacer_argument():
     print("Argument introuvable.\n")
 
 
+def reset_balance():
+    """
+    Réinitialise complètement les listes POUR et CONTRE.
+    """
+    pour.clear()
+    contre.clear()
+    print("Balance réinitialisée.\n")
+
+
 # ---------------------------------------------------------
 # Programme principal (s'exécute quand on double-clique)
 # ---------------------------------------------------------
@@ -64,7 +73,7 @@ if __name__ == "__main__":
     while True:
         # On demande un argument
         argument = input(
-            "Écris ton argument (ou 'show' pour afficher, 'del' pour supprimer, 'move' pour déplacer, 'quit' pour fermer) : "
+            "Écris ton argument (ou 'show' pour afficher, 'del' pour supprimer, 'move' pour déplacer, 'reset' pour tout effacer, 'quit' pour fermer) : "
         )
 
         # Option pour quitter
@@ -84,6 +93,11 @@ if __name__ == "__main__":
         # Option pour déplacer un argument
         if argument.lower() == "move":
             deplacer_argument()
+            continue
+
+        # Option pour réinitialiser la balance
+        if argument.lower() == "reset":
+            reset_balance()
             continue
 
         # On demande où le mettre
