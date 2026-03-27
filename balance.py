@@ -7,10 +7,24 @@ def afficher_balance():
     """
     Affiche simplement les listes POUR et CONTRE.
     """
-    print("\n--- BALANCE ---")
-    print("POUR :", pour)
-    print("CONTRE :", contre)
-    print("----------------\n")
+    print("\n================ BALANCE ================")
+
+    print("\nPOUR :")
+    if pour:
+        for item in pour:
+            print("  -", item)
+    else:
+        print("  (aucun argument)")
+
+    print("\nCONTRE :")
+    if contre:
+        for item in contre:
+            print("  -", item)
+    else:
+        print("  (aucun argument)")
+
+    print("\n=========================================\n")
+
 
 
 def supprimer_argument():
@@ -71,16 +85,19 @@ def resultat_balance():
     nb_pour = len(pour)
     nb_contre = len(contre)
 
-    print("\n--- RÉSULTAT ---")
-    print("POUR :", nb_pour)
-    print("CONTRE :", nb_contre)
+    print("\n================ RÉSULTAT ================")
+    print(f"POUR   : {nb_pour}")
+    print(f"CONTRE : {nb_contre}")
 
     if nb_pour > nb_contre:
-        print("Conclusion : la balance penche POUR.\n")
+        print("\nConclusion : la balance penche POUR.")
     elif nb_contre > nb_pour:
-        print("Conclusion : la balance penche CONTRE.\n")
+        print("\nConclusion : la balance penche CONTRE.")
     else:
-        print("Conclusion : équilibre.\n")
+        print("\nConclusion : équilibre.")
+
+    print("==========================================\n")
+
 
 
 # ---------------------------------------------------------
