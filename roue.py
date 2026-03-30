@@ -89,6 +89,16 @@ def reset_historique():
     historique.clear()
     print("Historique réinitialisé.")
 
+def supprimer_option(nom):
+    """
+    Supprime une option existante si elle est trouvée.
+    """
+    for opt in options:
+        if opt["nom"] == nom:
+            options.remove(opt)
+            print(f"Option supprimée : {nom}")
+            return
+    print("Option introuvable.")
 
 def menu():
     """
@@ -102,7 +112,9 @@ def menu():
         print("4. Modifier le poids d'une option")
         print("5. Voir l'historique")
         print("6. Réinitialiser l'historique")
-        print("7. Quitter")
+        print("7. Supprimer une option")
+        print("8. Quitter")
+
 
         choix = input("Choix : ")
 
@@ -136,6 +148,11 @@ def menu():
             reset_historique()
 
         elif choix == "7":
+            nom = input("Option à supprimer : ")
+            supprimer_option(nom)
+
+
+        elif choix == "8":
             print("Fermeture du programme.")
             break
 
