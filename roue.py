@@ -99,6 +99,12 @@ def supprimer_option(nom):
             print(f"Option supprimée : {nom}")
             return
     print("Option introuvable.")
+def reset_options():
+    """
+    Réinitialise complètement la liste des options.
+    """
+    options.clear()
+    print("Toutes les options ont été supprimées.")
 
 def menu():
     """
@@ -113,7 +119,8 @@ def menu():
         print("5. Voir l'historique")
         print("6. Réinitialiser l'historique")
         print("7. Supprimer une option")
-        print("8. Quitter")
+        print("8. Réinitialiser les options")
+        print("9. Quitter")
 
 
         choix = input("Choix : ")
@@ -151,8 +158,10 @@ def menu():
             nom = input("Option à supprimer : ")
             supprimer_option(nom)
 
-
         elif choix == "8":
+            reset_options()
+
+        elif choix == "9":
             print("Fermeture du programme.")
             break
 
