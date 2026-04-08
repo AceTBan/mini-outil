@@ -1,25 +1,29 @@
 import sys
 from datetime import datetime
+GREEN = "\033[92m"
+BLUE = "\033[94m"
+RESET = "\033[0m"
 
 def afficher_aide():
-    print("--- Mon Assistant Personnel ---")
+    print(f"{GREEN}--- Mon Assistant Personnel ---{RESET}")
     print("Commandes disponibles :")
     print("- aide : Affiche ce message")
     print("- date : Affiche l'heure actuelle")
+    print("- note : Enregistrer une note texte") 
     print("- quit : Quitter")
 def sauvegarder_note():
     note = input("Entrez votre note : ")
     with open("notes.txt", "a", encoding="utf-8") as f:
         f.write(f"[{datetime.now()}] {note}\n")
-    print("✅ Note sauvegardée.")
+    print(" Note sauvegardée.")
 def main():
     while True:
-        commande = input("\nQue puis-je faire pour vous ? > ").lower()
+        commande = input(f"{BLUE}Que puis-je faire ? > {RESET}").lower()
         
         if commande == "aide":
             afficher_aide()
         elif commande == "date":
-            print(f"Nous sommes le {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+            print(f"{GREEN}Nous sommes le {datetime.now().strftime('%d/%m/%Y %H:%M')}")
         elif commande == "note":
             sauvegarder_note()
         elif commande == "quit":
