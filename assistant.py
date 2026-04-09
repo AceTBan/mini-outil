@@ -26,10 +26,26 @@ def main():
             print(f"{GREEN}Nous sommes le {datetime.now().strftime('%d/%m/%Y %H:%M')}")
         elif commande == "note":
             sauvegarder_note()
+        elif commande == "calc":
+            calculatrice()
         elif commande == "quit":
             break
         else:
             print("Commande inconnue. Tapez 'aide'.")
+
+def calculatrice():
+    print(f"{BLUE}--- Mode Calculatrice (tape 'menu' pour revenir) ---{RESET}")
+    while True:
+        expression = input("Calcul > ")
+        if expression.lower() == "menu":
+            break
+        try:
+            # eval() est pratique mais attention en vrai prod. 
+            # Ici, pour un assistant CLI, c'est parfait.
+            resultat = eval(expression)
+            print(f" {GREEN}Résultat : {resultat}{RESET}")
+        except Exception as e:
+            print(f"❌ Erreur : Expression invalide ({e})")
 
 if __name__ == "__main__":
     main()
