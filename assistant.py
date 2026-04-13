@@ -31,12 +31,21 @@ def calculatrice():
             print(f" {GREEN}Résultat : {eval(expression)}{RESET}")
         except Exception as e:
             print(f"Erreur : Expression invalide ({e})")
+def afficher_stats():
+    if not os.path.exists("notes.txt"):
+        print("Aucune note enregistrée pour le moment.")
+        return
+    
+    with open("notes.txt", "r", encoding="utf-8") as f:
+        lignes = f.readlines()
+        print(f"Vous avez enregistré {len(lignes)} notes au total.")
 
 COMMANDES = {
     "aide": afficher_aide,
     "date": afficher_date,
     "note": sauvegarder_note,
     "calc": calculatrice,
+    "stats": afficher_stats,
     "quit": sys.exit
 }
 
