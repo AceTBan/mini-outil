@@ -40,12 +40,23 @@ def afficher_stats():
         lignes = f.readlines()
         print(f"Vous avez enregistré {len(lignes)} notes au total.")
 
+def chercher_fichier():
+    extension = input("Quelle extension cherchez-vous ? (ex: .py, .txt) : ")
+    fichiers = [f for f in os.listdir('.') if f.endswith(extension)]
+    if fichiers:
+        print(f"Fichiers {extension} trouvés :")
+        for f in fichiers:
+            print(f" - {f}")
+    else:
+        print(f"Aucun fichier {extension} ici.")        
+
 COMMANDES = {
     "aide": afficher_aide,
     "date": afficher_date,
     "note": sauvegarder_note,
     "calc": calculatrice,
     "stats": afficher_stats,
+    "find": chercher_fichier,
     "quit": sys.exit
 }
 
