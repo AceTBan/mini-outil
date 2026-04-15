@@ -1,3 +1,5 @@
+import random
+import string
 import sys
 from datetime import datetime
 import os
@@ -48,7 +50,13 @@ def chercher_fichier():
         for f in fichiers:
             print(f" - {f}")
     else:
-        print(f"Aucun fichier {extension} ici.")        
+        print(f"Aucun fichier {extension} ici.")    
+
+def generer_password():
+    longueur = 12
+    caracteres = string.ascii_letters + string.digits + string.punctuation
+    password = "".join(random.choice(caracteres) for _ in range(longueur))
+    print(f" Mot de passe suggéré : {password}")    
 
 COMMANDES = {
     "aide": afficher_aide,
@@ -57,6 +65,7 @@ COMMANDES = {
     "calc": calculatrice,
     "stats": afficher_stats,
     "find": chercher_fichier,
+    "pass": generer_password,
     "quit": sys.exit
 }
 
