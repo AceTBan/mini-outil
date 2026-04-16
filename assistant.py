@@ -58,6 +58,16 @@ def generer_password():
     password = "".join(random.choice(caracteres) for _ in range(longueur))
     print(f" Mot de passe suggéré : {password}")    
 
+def main():
+    # lance 'python assistant.py date' directement
+    if len(sys.argv) > 1:
+        choix = sys.argv[1].lower()
+        if choix in COMMANDES:
+            COMMANDES[choix]()
+            return
+
+    print(f"{GREEN}Assistant prêt. Tapez 'aide' pour commencer.{RESET}")
+    # ... (reste de ta boucle while True habituelle)
 COMMANDES = {
     "aide": afficher_aide,
     "date": afficher_date,
