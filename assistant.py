@@ -4,70 +4,76 @@ import sys
 from datetime import datetime
 import os
 
-# Couleurs
+# Codes couleur ANSI pour le terminal
 GREEN = "\033[92m"
 BLUE = "\033[94m"
 RESET = "\033[0m"
 
+def log_erreur(message):
+    """Enregistre les erreurs système dans un fichier log local."""
+    with open(".errors.log", "a", encoding="utf-8") as f:
+        f.write(f"[{datetime.now()}] ERROR: {message}\n")
+
 def afficher_aide():
-    print(f"{GREEN}--- Mon Assistant Personnel ---{RESET}")
-    print("Commandes disponibles :")
+    """Affiche la liste des commandes disponibles dans l'application."""
+    print(f"\n{GREEN}--- Assistant Personnel ---{RESET}")
+    print("Liste des commandes :")
     for cmd in COMMANDES.keys():
         print(f"- {cmd}")
 
 def afficher_date():
-    print(f"{GREEN}Nous sommes le {datetime.now().strftime('%d/%m/%Y %H:%M')}{RESET}")
+    """Affiche la date et l'heure système formatées."""
+    print(f"{GREEN}Date actuelle : {datetime.now().strftime('%d/%m/%Y %H:%M')}{RESET}")
 
 def sauvegarder_note():
-    note = input("Entrez votre note : ")
+    """Ajoute une entrée textuelle dans le fichier notes.txt."""
+    note = input("Saisie de la note : ")
     with open("notes.txt", "a", encoding="utf-8") as f:
         f.write(f"[{datetime.now()}] {note}\n")
-    print(" Note sauvegardée.")
+    print("Note enregistrée.")
 
 def calculatrice():
-    print(f"{BLUE}--- Mode Calculatrice (tape 'menu' pour revenir) ---{RESET}")
+    """Exécute des opérations mathématiques simples via l'entrée utilisateur."""
+    print(f"{BLUE}--- Module Calculatrice (taper 'menu' pour quitter) ---{RESET}")
     while True:
         expression = input("Calcul > ")
-        if expression.lower() == "menu": break
+        if expression.lower() == "menu": 
+            break
         try:
-            print(f" {GREEN}Résultat : {eval(expression)}{RESET}")
+            expression = expression.replace(',', '.')
+            print(f" Résultat : {eval(expression)}")
         except Exception as e:
-            print(f"Erreur : Expression invalide ({e})")
+            print("Erreur : Expression invalide.")
+            log_erreur(str(e))
+
 def afficher_stats():
+    """Calcule le nombre de lignes présentes dans le fichier de notes."""
     if not os.path.exists("notes.txt"):
-        print("Aucune note enregistrée pour le moment.")
+        print("Fichier de notes inexistant.")
         return
-    
     with open("notes.txt", "r", encoding="utf-8") as f:
         lignes = f.readlines()
-        print(f"Vous avez enregistré {len(lignes)} notes au total.")
+        print(f"Total de notes enregistrées : {len(lignes)}")
 
 def chercher_fichier():
-    extension = input("Quelle extension cherchez-vous ? (ex: .py, .txt) : ")
+    """Recherche les fichiers du répertoire courant par extension."""
+    extension = input("Extension recherchée (ex: .py) : ")
     fichiers = [f for f in os.listdir('.') if f.endswith(extension)]
     if fichiers:
-        print(f"Fichiers {extension} trouvés :")
-        for f in fichiers:
+        print(f"Fichiers {extension} localisés :")
+        for f in fichiers: 
             print(f" - {f}")
     else:
-        print(f"Aucun fichier {extension} ici.")    
+        print(f"Aucun fichier correspondant trouvé.")
 
 def generer_password():
+    """Génère une chaîne de caractères aléatoire de 12 symboles."""
     longueur = 12
     caracteres = string.ascii_letters + string.digits + string.punctuation
     password = "".join(random.choice(caracteres) for _ in range(longueur))
-    print(f" Mot de passe suggéré : {password}")    
+    print(f"Mot de passe généré : {password}")
 
-def main():
-    # lance 'python assistant.py date' directement
-    if len(sys.argv) > 1:
-        choix = sys.argv[1].lower()
-        if choix in COMMANDES:
-            COMMANDES[choix]()
-            return
-
-    print(f"{GREEN}Assistant prêt. Tapez 'aide' pour commencer.{RESET}")
-    # ... (reste de ta boucle while True habituelle)
+# Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
     "date": afficher_date,
@@ -80,14 +86,27 @@ COMMANDES = {
 }
 
 def main():
-    print(f"{GREEN}Assistant prêt. Tapez 'aide' pour commencer.{RESET}")
-    while True:
-        choix = input(f"{BLUE} > {RESET}").lower().strip()
-        
+    """Point d'entrée principal gérant les modes interactif et arguments CLI."""
+    # Gestion des arguments de ligne de commande
+    if len(sys.argv) > 1:
+        choix = sys.argv[1].lower()
         if choix in COMMANDES:
             COMMANDES[choix]()
-        else:
-            print("Commande inconnue. Tapez 'aide'.")
+            return
+
+    print(f"{GREEN}Assistant opérationnel. Taper 'aide' pour les options.{RESET}")
+    while True:
+        try:
+            choix = input(f"{BLUE} > {RESET}").lower().strip()
+            if not choix: 
+                continue
+            
+            if choix in COMMANDES:
+                COMMANDES[choix]()
+            else:
+                print("Commande non reconnue.")
+        except (KeyboardInterrupt, EOFError):
+            break
 
 if __name__ == "__main__":
     main()
