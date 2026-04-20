@@ -3,6 +3,7 @@ import string
 import sys
 from datetime import datetime
 import os
+import urllib.request
 
 # Codes couleur ANSI pour le terminal
 GREEN = "\033[92m"
@@ -73,6 +74,17 @@ def generer_password():
     password = "".join(random.choice(caracteres) for _ in range(longueur))
     print(f"Mot de passe généré : {password}")
 
+def verifier_site():
+    """Vérifie l'accessibilité d'une URL."""
+    url = input("Entrez l'URL à tester (ex: https://google.com) : ")
+    try:
+        statut = urllib.request.urlopen(url).getcode()
+        if statut == 200:
+            print(f"Le site {url} est en ligne (Code 200).")
+    except Exception as e:
+        print(f"Impossible de joindre le site. Erreur : {e}")
+        log_erreur(str(e))
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -82,6 +94,7 @@ COMMANDES = {
     "stats": afficher_stats,
     "find": chercher_fichier,
     "pass": generer_password,
+    "check": verifier_site,
     "quit": sys.exit
 }
 
