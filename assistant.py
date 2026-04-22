@@ -100,7 +100,15 @@ def exporter_json():
     with open("notes.json", "w", encoding="utf-8") as f_json:
         json.dump(notes_list, f_json, indent=4, ensure_ascii=False)
     print("Exportation vers notes.json terminée.")
-    
+
+def nettoyer_logs():
+    """Supprime le fichier de logs d'erreurs s'il existe."""
+    if os.path.exists(".errors.log"):
+        os.remove(".errors.log")
+        print("Fichier de logs supprimé.")
+    else:
+        print("Aucun fichier de logs à supprimer.")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -111,6 +119,7 @@ COMMANDES = {
     "find": chercher_fichier,
     "pass": generer_password,
     "check": verifier_site,
+    "clean": nettoyer_logs,
     "quit": sys.exit
 }
 
