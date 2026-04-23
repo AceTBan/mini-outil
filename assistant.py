@@ -5,6 +5,8 @@ from datetime import datetime
 import os
 import urllib.request
 import json
+import time
+
 
 # Codes couleur ANSI pour le terminal
 GREEN = "\033[92m"
@@ -109,6 +111,15 @@ def nettoyer_logs():
     else:
         print("Aucun fichier de logs à supprimer.")
 
+def chronometre():
+    """Mesure le temps écoulé entre deux pressions sur la touche Entrée."""
+    input("Appuyez sur Entrée pour démarrer...")
+    debut = time.time()
+    input("Appuyez sur Entrée pour arrêter.")
+    fin = time.time()
+    duree = round(fin - debut, 2)
+    print(f"Temps écoulé : {duree} secondes.")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -120,6 +131,7 @@ COMMANDES = {
     "pass": generer_password,
     "check": verifier_site,
     "clean": nettoyer_logs,
+    "chrono": chronometre,
     "quit": sys.exit
 }
 
