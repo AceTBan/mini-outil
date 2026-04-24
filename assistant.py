@@ -6,6 +6,7 @@ import os
 import urllib.request
 import json
 import time
+import urllib.request
 
 
 # Codes couleur ANSI pour le terminal
@@ -120,6 +121,17 @@ def chronometre():
     duree = round(fin - debut, 2)
     print(f"Temps écoulé : {duree} secondes.")
 
+def verifier_site():
+    """Vérifie l'accessibilité d'une URL."""
+    url = input("Entrez l'URL à tester (ex: https://google.com) : ")
+    try:
+        statut = urllib.request.urlopen(url).getcode()
+        if statut == 200:
+            print(f"Le site {url} est en ligne (Code 200).")
+    except Exception as e:
+        print(f"Impossible de joindre le site. Erreur : {e}")
+        log_erreur(str(e))
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -132,6 +144,7 @@ COMMANDES = {
     "check": verifier_site,
     "clean": nettoyer_logs,
     "chrono": chronometre,
+    "check": verifier_site,
     "quit": sys.exit
 }
 
