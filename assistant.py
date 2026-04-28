@@ -8,6 +8,8 @@ import json
 import time
 import urllib.request
 import platform
+import urllib.request
+
 
 
 
@@ -130,6 +132,17 @@ def infos_systeme():
     print(f"Architecture : {platform.machine()}")
     print(f"Répertoire courant : {os.getcwd()}")
 
+def verifier_site():
+    """Vérifie l'accessibilité d'une URL."""
+    url = input("Entrez l'URL à tester (ex: https://google.com) : ")
+    try:
+        statut = urllib.request.urlopen(url).getcode()
+        if statut == 200:
+            print(f"Le site {url} est en ligne (Code 200).")
+    except Exception as e:
+        print(f"Impossible de joindre le site. Erreur : {e}")
+        log_erreur(str(e))
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -143,6 +156,7 @@ COMMANDES = {
     "clean": nettoyer_logs,
     "chrono": chronometre,
     "sys": infos_systeme,
+    "check": verifier_site,
     "quit": sys.exit
 }
 
