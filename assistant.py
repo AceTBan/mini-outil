@@ -143,6 +143,20 @@ def verifier_site():
         print(f"Impossible de joindre le site. Erreur : {e}")
         log_erreur(str(e))
 
+def exporter_json():
+    """Convertit les notes du fichier texte vers un format JSON structuré."""
+    if not os.path.exists("notes.txt"):
+        print("Aucune donnée à exporter.")
+        return
+    
+    notes_list = []
+    with open("notes.txt", "r", encoding="utf-8") as f:
+        for ligne in f:
+            notes_list.append({"contenu": ligne.strip()})
+    
+    with open("notes.json", "w", encoding="utf-8") as f_json:
+        json.dump(notes_list, f_json, indent=4, ensure_ascii=False)
+    print("Exportation vers notes.json terminée.")
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -157,6 +171,7 @@ COMMANDES = {
     "chrono": chronometre,
     "sys": infos_systeme,
     "check": verifier_site,
+    "export": exporter_json,
     "quit": sys.exit
 }
 
