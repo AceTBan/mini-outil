@@ -166,6 +166,21 @@ def nettoyer_logs():
     else:
         print("Aucun fichier de logs à supprimer.")
 
+def rechercher_note():
+    """Parcourt le fichier de notes pour localiser un mot-clé spécifique."""
+    if not os.path.exists("notes.txt"):
+        print("Fichier de notes introuvable.")
+        return
+    mot_cle = input("Texte à rechercher : ").lower()
+    trouve = False
+    with open("notes.txt", "r", encoding="utf-8") as f:
+        for ligne in f:
+            if mot_cle in ligne.lower():
+                print(f"Trouvé : {ligne.strip()}")
+                trouve = True
+    if not trouve:
+        print("Aucune correspondance trouvée.")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -182,6 +197,7 @@ COMMANDES = {
     "check": verifier_site,
     "export": exporter_json,
     "clean": nettoyer_logs,
+    "search": rechercher_note,
     "quit": sys.exit
 }
 
