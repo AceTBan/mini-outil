@@ -181,6 +181,19 @@ def rechercher_note():
     if not trouve:
         print("Aucune correspondance trouvée.")
 
+def formater_texte():
+    """Transforme une chaîne de caractères selon le format choisi."""
+    texte = input("Texte à transformer : ")
+    print("1. MAJUSCULES\n2. minuscules")
+    choix = input("Choix (1/2) : ")
+    if choix == "1":
+        print(f"Résultat : {texte.upper()}")
+    elif choix == "2":
+        print(f"Résultat : {texte.lower()}")
+    else:
+        print("Option invalide.")
+
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -198,6 +211,7 @@ COMMANDES = {
     "export": exporter_json,
     "clean": nettoyer_logs,
     "search": rechercher_note,
+    "text": formater_texte,
     "quit": sys.exit
 }
 
