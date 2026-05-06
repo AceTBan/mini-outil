@@ -193,6 +193,19 @@ def formater_texte():
     else:
         print("Option invalide.")
 
+def creer_dossier_backup():
+    """Crée un répertoire nommé 'backup' s'il n'existe pas déjà."""
+    nom_dossier = "backup"
+    try:
+        if not os.path.exists(nom_dossier):
+            os.makedirs(nom_dossier)
+            print(f"Répertoire '{nom_dossier}' créé avec succès.")
+        else:
+            print(f"Le répertoire '{nom_dossier}' existe déjà.")
+    except Exception as e:
+        log_erreur(str(e))
+        print("Erreur lors de la création du répertoire.")
+
 
 # Structure de pilotage par dictionnaire
 COMMANDES = {
@@ -212,6 +225,7 @@ COMMANDES = {
     "clean": nettoyer_logs,
     "search": rechercher_note,
     "text": formater_texte,
+    "mkdir": creer_dossier_backup,
     "quit": sys.exit
 }
 
