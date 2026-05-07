@@ -9,6 +9,7 @@ import time
 import urllib.request
 import platform
 import urllib.request
+import shutil
 
 
 
@@ -206,6 +207,12 @@ def creer_dossier_backup():
         log_erreur(str(e))
         print("Erreur lors de la création du répertoire.")
 
+def espace_disque():
+    """Affiche les statistiques d'utilisation du disque principal."""
+    total, utilisé, libre = shutil.disk_usage("/")
+    print(f"Total : {total // (2**30)} Go")
+    print(f"Utilisé : {utilisé // (2**30)} Go")
+    print(f"Libre : {libre // (2**30)} Go")
 
 # Structure de pilotage par dictionnaire
 COMMANDES = {
@@ -226,6 +233,7 @@ COMMANDES = {
     "search": rechercher_note,
     "text": formater_texte,
     "mkdir": creer_dossier_backup,
+    "disk": espace_disque,
     "quit": sys.exit
 }
 
