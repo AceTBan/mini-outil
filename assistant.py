@@ -214,6 +214,19 @@ def espace_disque():
     print(f"Utilisé : {utilisé // (2**30)} Go")
     print(f"Libre : {libre // (2**30)} Go")
 
+def lire_logs_du_jour():
+    """Affiche uniquement les erreurs enregistrées à la date actuelle."""
+    if not os.path.exists(".errors.log"):
+        print("Aucun log disponible.")
+        return
+    aujourdhui = datetime.now().strftime('%Y-%m-%d')
+    print(f"--- Erreurs du {aujourdhui} ---")
+    with open(".errors.log", "r", encoding="utf-8") as f:
+        for ligne in f:
+            if aujourdhui in ligne:
+                print(ligne.strip())
+
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -234,6 +247,7 @@ COMMANDES = {
     "text": formater_texte,
     "mkdir": creer_dossier_backup,
     "disk": espace_disque,
+    "logs": lire_logs_du_jour,
     "quit": sys.exit
 }
 
