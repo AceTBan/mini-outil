@@ -226,6 +226,18 @@ def lire_logs_du_jour():
             if aujourdhui in ligne:
                 print(ligne.strip())
 
+def aperçu_notes():
+    """Affiche les 5 dernières entrées du fichier notes.txt."""
+    if not os.path.exists("notes.txt"):
+        print("Fichier de notes inexistant.")
+        return
+    with open("notes.txt", "r", encoding="utf-8") as f:
+        lignes = f.readlines()
+        dernières_lignes = lignes[-5:]
+        print("--- Dernières notes ---")
+        for ligne in dernières_lignes:
+            print(ligne.strip())
+
 
 # Structure de pilotage par dictionnaire
 COMMANDES = {
@@ -248,6 +260,7 @@ COMMANDES = {
     "mkdir": creer_dossier_backup,
     "disk": espace_disque,
     "logs": lire_logs_du_jour,
+    "tail": aperçu_notes,
     "quit": sys.exit
 }
 
