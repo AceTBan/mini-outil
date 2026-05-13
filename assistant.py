@@ -238,6 +238,19 @@ def aperçu_notes():
         for ligne in dernières_lignes:
             print(ligne.strip())
 
+def compte_a_rebours():
+    """Calcule le delta de jours entre aujourd'hui et une date cible."""
+    cible = input("Entrez une date (JJ/MM/AAAA) : ")
+    try:
+        date_cible = datetime.strptime(cible, "%d/%m/%Y")
+        diff = date_cible - datetime.now()
+        if diff.days > 0:
+            print(f"Il reste {diff.days} jours avant le {cible}.")
+        else:
+            print("La date est déjà passée.")
+    except ValueError:
+        print("Format de date invalide.")
+
 
 # Structure de pilotage par dictionnaire
 COMMANDES = {
@@ -261,6 +274,7 @@ COMMANDES = {
     "disk": espace_disque,
     "logs": lire_logs_du_jour,
     "tail": aperçu_notes,
+    "countdown": compte_a_rebours,
     "quit": sys.exit
 }
 
