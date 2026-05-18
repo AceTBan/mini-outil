@@ -251,6 +251,13 @@ def compte_a_rebours():
     except ValueError:
         print("Format de date invalide.")
 
+def vars_environnement():
+    """Affiche les variables d'environnement système principales."""
+    keys = ["PATH", "USER", "OS", "USERNAME", "HOME"]
+    print("--- Variables Système ---")
+    for key in keys:
+        val = os.environ.get(key, "Non défini")
+        print(f"{key} : {val}")
 
 # Structure de pilotage par dictionnaire
 COMMANDES = {
@@ -275,6 +282,7 @@ COMMANDES = {
     "logs": lire_logs_du_jour,
     "tail": aperçu_notes,
     "countdown": compte_a_rebours,
+    "env": vars_environnement,
     "quit": sys.exit
 }
 
