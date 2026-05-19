@@ -259,6 +259,12 @@ def vars_environnement():
         val = os.environ.get(key, "Non défini")
         print(f"{key} : {val}")
 
+def lancer_des():
+    """Simule le lancer de deux dés à 6 faces."""
+    de1 = random.randint(1, 6)
+    de2 = random.randint(1, 6)
+    print(f"Résultat : {de1} et {de2} (Total : {de1 + de2})")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -283,6 +289,7 @@ COMMANDES = {
     "tail": aperçu_notes,
     "countdown": compte_a_rebours,
     "env": vars_environnement,
+    "dice": lancer_des,
     "quit": sys.exit
 }
 
