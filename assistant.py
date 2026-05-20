@@ -265,6 +265,22 @@ def lancer_des():
     de2 = random.randint(1, 6)
     print(f"Résultat : {de1} et {de2} (Total : {de1 + de2})")
 
+def archiver_logs():
+    """Copie le fichier log vers le répertoire backup avec horodatage."""
+    source = ".errors.log"
+    if not os.path.exists(source):
+        print("Aucun log à archiver.")
+        return
+    
+    nom_archive = f"backup/errors_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    try:
+        if not os.path.exists("backup"):
+            os.makedirs("backup")
+        shutil.copy(source, nom_archive)
+        print(f"Archive créée : {nom_archive}")
+    except Exception as e:
+        print(f"Erreur d'archivage : {e}")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -290,6 +306,7 @@ COMMANDES = {
     "countdown": compte_a_rebours,
     "env": vars_environnement,
     "dice": lancer_des,
+    "archive": archiver_logs,
     "quit": sys.exit
 }
 
