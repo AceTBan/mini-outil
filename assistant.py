@@ -281,6 +281,20 @@ def archiver_logs():
     except Exception as e:
         print(f"Erreur d'archivage : {e}")
 
+def analyser_texte():
+    """Calcule le nombre de mots, de caractères et de phrases d'un texte."""
+    texte = input("Entrez le texte à analyser : ").strip()
+    if not texte:
+        print("Texte vide.")
+        return
+    mots = len(texte.split())
+    caracteres = len(texte)
+    # Estimation simple du nombre de phrases basée sur la ponctuation
+    phrases = texte.count('.') + texte.count('!') + texte.count('?')
+    phrases = max(1, phrases) if mots > 0 else 0
+    
+    print(f"Statistiques : {mots} mots, {caracteres} caractères, {phrases} phrase(s).")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -307,6 +321,7 @@ COMMANDES = {
     "env": vars_environnement,
     "dice": lancer_des,
     "archive": archiver_logs,
+    "count": analyser_texte,
     "quit": sys.exit
 }
 
