@@ -294,6 +294,13 @@ def analyser_texte():
     phrases = max(1, phrases) if mots > 0 else 0
     
     print(f"Statistiques : {mots} mots, {caracteres} caractères, {phrases} phrase(s).")
+import hashlib
+
+def generer_hash():
+    """Génère l'empreinte SHA-256 d'une chaîne de caractères."""
+    texte = input("Texte à hacher : ")
+    hash_encode = hashlib.sha256(texte.encode('utf-8')).hexdigest()
+    print(f"SHA-256 : {hash_encode}")
 
 # Structure de pilotage par dictionnaire
 COMMANDES = {
@@ -322,6 +329,7 @@ COMMANDES = {
     "dice": lancer_des,
     "archive": archiver_logs,
     "count": analyser_texte,
+    "hash": generer_hash,
     "quit": sys.exit
 }
 
