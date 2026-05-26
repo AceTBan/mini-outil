@@ -302,6 +302,22 @@ def generer_hash():
     hash_encode = hashlib.sha256(texte.encode('utf-8')).hexdigest()
     print(f"SHA-256 : {hash_encode}")
 
+def importer_json():
+    """Lit et affiche le contenu du fichier structuré notes.json."""
+    chemin = "notes.json"
+    if not os.path.exists(chemin):
+        print(f"Fichier {chemin} introuvable. Exécutez 'export' d'abord.")
+        return
+    try:
+        with open(chemin, "r", encoding="utf-8") as f:
+            donnees = json.load(f)
+            print(f"--- Contenu de {chemin} ---")
+            for index, item in enumerate(donnees, start=1):
+                print(f"{index}. {item.get('contenu', '')}")
+    except Exception as e:
+        print("Erreur lors de la lecture du fichier JSON.")
+        log_erreur(str(e))
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -330,6 +346,7 @@ COMMANDES = {
     "archive": archiver_logs,
     "count": analyser_texte,
     "hash": generer_hash,
+    "import": importer_json,
     "quit": sys.exit
 }
 
