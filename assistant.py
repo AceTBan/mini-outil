@@ -10,7 +10,7 @@ import urllib.request
 import platform
 import urllib.request
 import shutil
-
+import re
 
 
 
@@ -318,6 +318,16 @@ def importer_json():
         print("Erreur lors de la lecture du fichier JSON.")
         log_erreur(str(e))
 
+def valider_email():
+    """Vérifie la conformité syntaxique d'une adresse e-mail."""
+    email = input("Entrez l'adresse e-mail à vérifier : ").strip()
+    # Expression régulière standard pour la validation d'email
+    pattern = r"^[a-zA-Z0-9-._]+@[a-zA-Z0-9-._]+\.[a-zA-Z]{2,}$"
+    if re.match(pattern, email):
+        print("Format de l'adresse e-mail valide.")
+    else:
+        print("Format de l'adresse e-mail invalide.")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -347,6 +357,7 @@ COMMANDES = {
     "count": analyser_texte,
     "hash": generer_hash,
     "import": importer_json,
+    "email": valider_email,
     "quit": sys.exit
 }
 
