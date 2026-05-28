@@ -328,6 +328,20 @@ def valider_email():
     else:
         print("Format de l'adresse e-mail invalide.")
 
+def sauvegarder_configuration():
+    """Génère un rapport d'état de l'application dans un fichier de configuration."""
+    config = {
+        "derniere_execution": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "commandes_disponibles": list(COMMANDES.keys()),
+        "statut_systeme": platform.system()
+    }
+    try:
+        with open(".config.json", "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=4)
+        print("Configuration de l'application mise à jour dans .config.json")
+    except Exception as e:
+        log_erreur(str(e))
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -358,6 +372,7 @@ COMMANDES = {
     "hash": generer_hash,
     "import": importer_json,
     "email": valider_email,
+    "save": sauvegarder_configuration,
     "quit": sys.exit
 }
 
