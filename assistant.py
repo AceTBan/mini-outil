@@ -342,6 +342,30 @@ def sauvegarder_configuration():
     except Exception as e:
         log_erreur(str(e))
 
+def afficher_dashboard():
+    """Génère un résumé de l'état des fichiers et des ressources du système."""
+    print(f"\n{GREEN}--- TABLEAU DE BORD DE L'ASSISTANT ---{RESET}")
+    print(f"Date : {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    print(f"Système d'exploitation : {platform.system()}")
+    
+    # Vérification de l'état des notes
+    if os.path.exists("notes.txt"):
+        taille_notes = os.path.getsize("notes.txt")
+        print(f"Fichier notes.txt : Actif ({taille_notes} octets)")
+    else:
+        print("Fichier notes.txt : Inexistant")
+        
+    # Vérification de l'état des erreurs
+    if os.path.exists(".errors.log"):
+        taille_logs = os.path.getsize(".errors.log")
+        print(f"Fichier de logs : {taille_logs} octets d'erreurs enregistrés")
+    else:
+        print("Fichier de logs : Aucun incident détecté")
+        
+    # Espace disque
+    _, _, libre = shutil.disk_usage("/")
+    print(f"Espace disque disponible : {libre // (2**30)} Go")
+
 # Structure de pilotage par dictionnaire
 COMMANDES = {
     "aide": afficher_aide,
@@ -373,6 +397,7 @@ COMMANDES = {
     "import": importer_json,
     "email": valider_email,
     "save": sauvegarder_configuration,
+    "dash": afficher_dashboard,
     "quit": sys.exit
 }
 
