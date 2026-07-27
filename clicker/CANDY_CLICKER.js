@@ -6,7 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
         candyCounter = 0;
 
     starter.addEventListener('click', function() {
-         candyCounter++;
-         output.innerHTML = 'Vous avez ' + candyCounter + ' candy !';
-    });
+        candyCounter++;
+        output.innerHTML = 'Vous avez ' + candyCounter + ' candy !';
+    let pop = document.createElement('span');
+pop.innerText = ' +1 🍬';
+pop.style.animation = 'fadeOut 0.8s forwards';
+output.appendChild(pop);
+setTimeout(() => pop.remove(), 800);
+        });
 });
