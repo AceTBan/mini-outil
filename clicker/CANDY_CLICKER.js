@@ -13,5 +13,12 @@ pop.innerText = ' +1 🍬';
 pop.style.animation = 'fadeOut 0.8s forwards';
 output.appendChild(pop);
 setTimeout(() => pop.remove(), 800);
+
+ if (candyCounter >= multiplierCost) {
+    candyCounter -= multiplierCost;
+    clickPower++;
+    multiplierCost = Math.floor(multiplierCost * 1.5); // Augmente le prix
+ }
+
         });
 });
