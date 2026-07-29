@@ -20,5 +20,12 @@ setTimeout(() => pop.remove(), 800);
     multiplierCost = Math.floor(multiplierCost * 1.5); // Augmente le prix
  }
 
+ setInterval(function() {
+    if (autoClickers > 0) {
+        candyCounter += autoClickers;
+        output.innerHTML = 'Vous avez ' + candyCounter + ' candy !';
+    }
+}, 1000);
+
         });
 });
