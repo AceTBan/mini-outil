@@ -26,6 +26,10 @@ setTimeout(() => pop.remove(), 800);
         output.innerHTML = 'Vous avez ' + candyCounter + ' candy !';
     }
 }, 1000);
+// Sauvegarder
+localStorage.setItem('candyScore', candyCounter);
 
+// Charger au lancement
+candyCounter = parseInt(localStorage.getItem('candyScore')) || 0;
         });
 });
