@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
@@ -15,4 +15,16 @@
         <input id="starter" type="button" value="Cliquer-moi !" />
         <script src="js/app.js"></script>
     </body>
+    <style>
+    @keyframes fadeOut {
+        0% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-20px); }
+    }
+    .pop-animation {
+        display: inline-block;
+        color: #ff4757;
+        font-weight: bold;
+        animation: fadeOut 0.8s forwards;
+    }
+</style>
 </html>
