@@ -5,16 +5,18 @@ document.addEventListener('DOMContentLoaded', function () {
         starter = document.querySelector('#starter'),
         candyCounter = 0;
 
-    starter.addEventListener('click', function() {
+    function ajouterBonbon() {
         candyCounter++;
         output.innerHTML = 'Vous avez ' + candyCounter + ' candy ! ';
 
-        // Animation du +1
         let pop = document.createElement('span');
         pop.innerText = ' +1 🍬';
         pop.className = 'pop-animation';
         output.appendChild(pop);
         
         setTimeout(() => pop.remove(), 800);
-    });
+    }
+
+    // 1. Clic classique (Appui uniquement)
+    starter.addEventListener('mousedown', ajouterBonbon);
 });
