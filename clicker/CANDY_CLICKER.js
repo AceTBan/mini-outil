@@ -6,16 +6,20 @@ document.addEventListener('DOMContentLoaded', function () {
         starter = document.querySelector('#starter'),
         buyReleaseBtn = document.querySelector('#buy-release'),
         buyEnterBtn = document.querySelector('#buy-enter'),
-        buyLeaveBtn = document.querySelector('#buy-leave');
+        buyLeaveBtn = document.querySelector('#buy-leave'),
+        buyHoldBtn = document.querySelector('#buy-hold');
 
     // 2. Variables d'état du jeu
     let candyCounter = 0,
         releaseUnlocked = false,
         enterUnlocked = false,
         leaveUnlocked = false,
+        holdUnlocked = false,
         releaseCost = 100,
         enterCost = 50,
-        leaveCost = 50;
+        leaveCost = 50,
+        holdCost = 200,
+        holdInterval = null;
 
     // 3. Fonction pour ajouter un bonbon + animation
     function ajouterBonbon() {
@@ -37,16 +41,33 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!releaseUnlocked) buyReleaseBtn.disabled = candyCounter < releaseCost;
         if (!enterUnlocked) buyEnterBtn.disabled = candyCounter < enterCost;
         if (!leaveUnlocked) buyLeaveBtn.disabled = candyCounter < leaveCost;
+        if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
+    }
+
+    // Stop le timer du clic maintenu quand on relâche ou qu'on sort du bouton
+    function stopperMaintien() {
+        if (holdInterval) {
+            clearInterval(holdInterval);
+            holdInterval = null;
+        }
     }
 
     // --- ÉVÉNEMENTS DU BOUTON PRINCIPAL ---
 
-    // Clic Appui (De base)
-    starter.addEventListener('mousedown', ajouterBonbon);
+    // Clic Appui + Gestion de la Pression Prolongée (Jour 4)
+    starter.addEventListener('mousedown', function() {
+        ajouterBonbon();
 
-    // Relâchement (Jour 2)
+        // Si l'option Pression Prolongée est achetée, on lance la génération automatique en continu
+        if (holdUnlocked && !holdInterval) {
+            holdInterval = setInterval(ajouterBonbon, 150); // 1 bonbon toutes les 150ms
+        }
+    });
+
+    // Relâchement (Jour 2) + Stop maintien
     starter.addEventListener('mouseup', function() {
         if (releaseUnlocked) ajouterBonbon();
+        stopperMaintien();
     });
 
     // Entrée du curseur (Jour 3)
@@ -54,9 +75,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (enterUnlocked) ajouterBonbon();
     });
 
-    // Sortie du curseur (Jour 3)
+    // Sortie du curseur (Jour 3) + Stop maintien
     starter.addEventListener('mouseleave', function() {
         if (leaveUnlocked) ajouterBonbon();
+        stopperMaintien();
     });
 
     // --- ACHATS EN BOUTIQUE ---
@@ -90,6 +112,17 @@ document.addEventListener('DOMContentLoaded', function () {
             leaveUnlocked = true;
             buyLeaveBtn.innerText = 'Sortie du bouton : Activée ✔️';
             buyLeaveBtn.disabled = true;
+            maintienAffichage();
+        }
+    });
+
+    // Achat Jour 4 : Pression Prolongée
+    buyHoldBtn.addEventListener('click', function() {
+        if (candyCounter >= holdCost && !holdUnlocked) {
+            candyCounter -= holdCost;
+            holdUnlocked = true;
+            buyHoldBtn.innerText = 'Pression Prolongée : Activée ✔️';
+            buyHoldBtn.disabled = true;
             maintienAffichage();
         }
     });
