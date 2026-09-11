@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
         buyReleaseBtn = document.querySelector('#buy-release'),
         buyEnterBtn = document.querySelector('#buy-enter'),
         buyLeaveBtn = document.querySelector('#buy-leave'),
-        buyHoldBtn = document.querySelector('#buy-hold');
+        buyHoldBtn = document.querySelector('#buy-hold'),
+        buyMoveBtn = document.querySelector('#buy-move'),
+        buyAutoBtn = document.querySelector('#buy-auto');
 
     // 2. Variables d'état du jeu
     let candyCounter = 0,
@@ -19,7 +21,11 @@ document.addEventListener('DOMContentLoaded', function () {
         enterCost = 50,
         leaveCost = 50,
         holdCost = 200,
-        holdInterval = null;
+        holdInterval = null,
+        moveUnlocked = false,
+        autoUnlocked = false,
+        moveCost = 400,
+        autoCost = 800;
 
     // 3. Fonction pour ajouter un bonbon + animation
     function ajouterBonbon() {
@@ -42,6 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!enterUnlocked) buyEnterBtn.disabled = candyCounter < enterCost;
         if (!leaveUnlocked) buyLeaveBtn.disabled = candyCounter < leaveCost;
         if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
+        if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
+        if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
     }
 
     // Stop le timer du clic maintenu quand on relâche ou qu'on sort du bouton
@@ -81,9 +89,18 @@ document.addEventListener('DOMContentLoaded', function () {
         stopperMaintien();
     });
 
+        // Survol Turbo (Pixel par pixel)
+    starter.addEventListener('mousemove', function() {
+        if (moveUnlocked) ajouterBonbon();
+    });
+
+    // Auto-Clicker Passif (Génère 1 bonbon/sec sans rien faire)
+    setInterval(function() {
+        if (autoUnlocked) ajouterBonbon();
+    }, 1000);
     // --- ACHATS EN BOUTIQUE ---
 
-    // Achat Jour 2 : Relâchement
+    // Achat : Relâchement
     buyReleaseBtn.addEventListener('click', function() {
         if (candyCounter >= releaseCost && !releaseUnlocked) {
             candyCounter -= releaseCost;
@@ -94,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat Jour 3 : Entrée du bouton
+    // Achat : Entrée du bouton
     buyEnterBtn.addEventListener('click', function() {
         if (candyCounter >= enterCost && !enterUnlocked) {
             candyCounter -= enterCost;
@@ -105,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat Jour 3 : Sortie du bouton
+    // Achat : Sortie du bouton
     buyLeaveBtn.addEventListener('click', function() {
         if (candyCounter >= leaveCost && !leaveUnlocked) {
             candyCounter -= leaveCost;
@@ -116,13 +133,35 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat Jour 4 : Pression Prolongée
+    // Achat : Pression Prolongée
     buyHoldBtn.addEventListener('click', function() {
         if (candyCounter >= holdCost && !holdUnlocked) {
             candyCounter -= holdCost;
             holdUnlocked = true;
             buyHoldBtn.innerText = 'Pression Prolongée : Activée ✔️';
             buyHoldBtn.disabled = true;
+            maintienAffichage();
+        }
+    });
+
+    // Achat Survol Turbo
+    buyMoveBtn.addEventListener('click', function() {
+        if (candyCounter >= moveCost && !moveUnlocked) {
+            candyCounter -= moveCost;
+            moveUnlocked = true;
+            buyMoveBtn.innerText = 'Survol Turbo : Activé ✔️';
+            buyMoveBtn.disabled = true;
+            maintienAffichage();
+        }
+    });
+
+    // Achat Auto-Clicker Passif
+    buyAutoBtn.addEventListener('click', function() {
+        if (candyCounter >= autoCost && !autoUnlocked) {
+            candyCounter -= autoCost;
+            autoUnlocked = true;
+            buyAutoBtn.innerText = 'Auto-Clicker : Activé ✔️';
+            buyAutoBtn.disabled = true;
             maintienAffichage();
         }
     });
