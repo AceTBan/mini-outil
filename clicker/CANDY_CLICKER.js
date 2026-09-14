@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
         if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
         if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
+
+        localStorage.setItem('candyScore', candyCounter);
     }
 
     // Stop le timer du clic maintenu quand on relâche ou qu'on sort du bouton
