@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         buyAutoBtn = document.querySelector('#buy-auto');
 
     // 2. Variables d'état du jeu
-    let candyCounter = 0,
+    let candyCounter = 0,candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
         releaseUnlocked = false,
         enterUnlocked = false,
         leaveUnlocked = false,
