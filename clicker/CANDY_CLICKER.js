@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
         buyLeaveBtn = document.querySelector('#buy-leave'),
         buyHoldBtn = document.querySelector('#buy-hold'),
         buyMoveBtn = document.querySelector('#buy-move'),
-        buyAutoBtn = document.querySelector('#buy-auto');
+        buyAutoBtn = document.querySelector('#buy-auto'),
+        buyWheelBtn = document.querySelector('#buy-wheel');
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
@@ -25,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
         moveUnlocked = false,
         autoUnlocked = false,
         moveCost = 400,
-        autoCost = 800;
+        autoCost = 800,
+        wheelUnlocked = false,
+        wheelCost = 200;
 
     // 3. Fonction pour ajouter un bonbon + animation
     function ajouterBonbon() {
@@ -50,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
         if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
         if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
+        if (!wheelUnlocked) buyWheelBtn.disabled = candyCounter < wheelCost;
 
         localStorage.setItem('candyScore', candyCounter);
     }
@@ -74,18 +78,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Relâchement (Jour 2) + Stop maintien
+    // Relâchement  + Stop maintien
     starter.addEventListener('mouseup', function() {
         if (releaseUnlocked) ajouterBonbon();
         stopperMaintien();
     });
 
-    // Entrée du curseur (Jour 3)
+    // Entrée du curseur 
     starter.addEventListener('mouseenter', function() {
         if (enterUnlocked) ajouterBonbon();
     });
 
-    // Sortie du curseur (Jour 3) + Stop maintien
+    // Sortie du curseur + Stop maintien
     starter.addEventListener('mouseleave', function() {
         if (leaveUnlocked) ajouterBonbon();
         stopperMaintien();
@@ -100,6 +104,8 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(function() {
         if (autoUnlocked) ajouterBonbon();
     }, 1000);
+
+
     // --- ACHATS EN BOUTIQUE ---
 
     // Achat : Relâchement
@@ -167,4 +173,19 @@ document.addEventListener('DOMContentLoaded', function () {
             maintienAffichage();
         }
     });
+// Événement molette sur le bouton
+starter.addEventListener('wheel', function() {
+    if (wheelUnlocked) ajouterBonbon();
+});
+
+// Achat boutique
+buyWheelBtn.addEventListener('click', function() {
+    if (candyCounter >= wheelCost && !wheelUnlocked) {
+        candyCounter -= wheelCost;
+        wheelUnlocked = true;
+        buyWheelBtn.innerText = 'Action Molette : Activée ✔️';
+        buyWheelBtn.disabled = true;
+        maintienAffichage();
+    }
+});
 });
