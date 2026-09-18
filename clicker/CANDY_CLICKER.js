@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
-        releaseUnlocked = false,
+        releaseLvl = 0, // <-- Corrigé pour Jour 1
         enterUnlocked = false,
         leaveUnlocked = false,
         holdUnlocked = false,
@@ -30,13 +30,14 @@ document.addEventListener('DOMContentLoaded', function () {
         wheelUnlocked = false,
         wheelCost = 200;
 
-    // 3. Fonction pour ajouter un bonbon + animation
-    function ajouterBonbon() {
-        candyCounter++;
+    // 3. Fonction pour ajouter des bonbons + animation
+    function ajouterBonbons(quantite) {
+        if (quantite <= 0) return;
+        candyCounter += quantite;
         maintienAffichage();
 
         let pop = document.createElement('span');
-        pop.innerText = ' +1 🍬';
+        pop.innerText = ' +' + quantite + ' 🍬';
         pop.className = 'pop-animation';
         output.appendChild(pop);
         
@@ -47,7 +48,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function maintienAffichage() {
         output.innerHTML = 'Vous avez ' + candyCounter + ' candy ! ';
         
-        if (!releaseUnlocked) buyReleaseBtn.disabled = candyCounter < releaseCost;
+        // Mise à jour de la boutique Jour 1 (Release)
+        buyReleaseBtn.disabled = candyCounter < releaseCost;
+        if (document.getElementById('lvl-release')) {
+            document.getElementById('lvl-release').innerText = releaseLvl;
+            document.getElementById('cost-release').innerText = releaseCost;
+        }
+
+        // Anciens boutons (Jours suivants)
         if (!enterUnlocked) buyEnterBtn.disabled = candyCounter < enterCost;
         if (!leaveUnlocked) buyLeaveBtn.disabled = candyCounter < leaveCost;
         if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
@@ -70,51 +78,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clic Appui + Gestion de la Pression Prolongée (Jour 4)
     starter.addEventListener('mousedown', function() {
-        ajouterBonbon();
+        ajouterBonbons(1); // <-- Corrigé : ajouterBonbons(1) au lieu de ajouterBonbon()
 
-        // Si l'option Pression Prolongée est achetée, on lance la génération automatique en continu
         if (holdUnlocked && !holdInterval) {
-            holdInterval = setInterval(ajouterBonbon, 150); // 1 bonbon toutes les 150ms
+            holdInterval = setInterval(() => ajouterBonbons(1), 150);
         }
     });
 
-    // Relâchement  + Stop maintien
+    // Relâchement + Stop maintien (JOUR 1)
     starter.addEventListener('mouseup', function() {
-        if (releaseUnlocked) ajouterBonbon();
+        ajouterBonbons(releaseLvl); // Ajoute le montant du niveau de relâchement
         stopperMaintien();
     });
 
     // Entrée du curseur 
     starter.addEventListener('mouseenter', function() {
-        if (enterUnlocked) ajouterBonbon();
+        if (enterUnlocked) ajouterBonbons(1);
     });
 
     // Sortie du curseur + Stop maintien
     starter.addEventListener('mouseleave', function() {
-        if (leaveUnlocked) ajouterBonbon();
+        if (leaveUnlocked) ajouterBonbons(1);
         stopperMaintien();
     });
 
-        // Survol Turbo (Pixel par pixel)
+    // Survol Turbo (Pixel par pixel)
     starter.addEventListener('mousemove', function() {
-        if (moveUnlocked) ajouterBonbon();
+        if (moveUnlocked) ajouterBonbons(1);
     });
 
-    // Auto-Clicker Passif (Génère 1 bonbon/sec sans rien faire)
+    // Auto-Clicker Passif
     setInterval(function() {
-        if (autoUnlocked) ajouterBonbon();
+        if (autoUnlocked) ajouterBonbons(1);
     }, 1000);
 
 
     // --- ACHATS EN BOUTIQUE ---
 
-    // Achat : Relâchement
+    // Achat : Relâchement (JOUR 1)
     buyReleaseBtn.addEventListener('click', function() {
-        if (candyCounter >= releaseCost && !releaseUnlocked) {
+        if (candyCounter >= releaseCost) {
             candyCounter -= releaseCost;
-            releaseUnlocked = true;
-            buyReleaseBtn.innerText = 'Point au relâchement : Activé ✔️';
-            buyReleaseBtn.disabled = true;
+            releaseLvl++;
+            releaseCost = Math.floor(releaseCost * 1.5);
             maintienAffichage();
         }
     });
@@ -173,19 +179,20 @@ document.addEventListener('DOMContentLoaded', function () {
             maintienAffichage();
         }
     });
-// Événement molette sur le bouton
-starter.addEventListener('wheel', function() {
-    if (wheelUnlocked) ajouterBonbon();
-});
 
-// Achat boutique
-buyWheelBtn.addEventListener('click', function() {
-    if (candyCounter >= wheelCost && !wheelUnlocked) {
-        candyCounter -= wheelCost;
-        wheelUnlocked = true;
-        buyWheelBtn.innerText = 'Action Molette : Activée ✔️';
-        buyWheelBtn.disabled = true;
-        maintienAffichage();
-    }
-});
+    // Événement molette sur le bouton
+    starter.addEventListener('wheel', function() {
+        if (wheelUnlocked) ajouterBonbons(1);
+    });
+
+    // Achat boutique Molette
+    buyWheelBtn.addEventListener('click', function() {
+        if (candyCounter >= wheelCost && !wheelUnlocked) {
+            candyCounter -= wheelCost;
+            wheelUnlocked = true;
+            buyWheelBtn.innerText = 'Action Molette : Activée ✔️';
+            buyWheelBtn.disabled = true;
+            maintienAffichage();
+        }
+    });
 });
