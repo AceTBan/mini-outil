@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
-        releaseLvl = 0, // <-- Corrigé pour Jour 1
-        enterUnlocked = false,
+        releaseLvl = 0, 
+        enterLvl = 0,
         leaveUnlocked = false,
         holdUnlocked = false,
         releaseCost = 100,
@@ -48,15 +48,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function maintienAffichage() {
         output.innerHTML = 'Vous avez ' + candyCounter + ' candy ! ';
         
-        // Mise à jour de la boutique Jour 1 (Release)
+        // Mise à jour de la boutique 
         buyReleaseBtn.disabled = candyCounter < releaseCost;
         if (document.getElementById('lvl-release')) {
             document.getElementById('lvl-release').innerText = releaseLvl;
             document.getElementById('cost-release').innerText = releaseCost;
         }
 
-        // Anciens boutons (Jours suivants)
-        if (!enterUnlocked) buyEnterBtn.disabled = candyCounter < enterCost;
+        // Anciens boutons 
+        buyEnterBtn.disabled = candyCounter < enterCost;
+        if (document.getElementById('lvl-enter')) {
+            document.getElementById('lvl-enter').innerText = enterLvl;
+            document.getElementById('cost-enter').innerText = enterCost;
+        }
         if (!leaveUnlocked) buyLeaveBtn.disabled = candyCounter < leaveCost;
         if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
         if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
@@ -76,9 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- ÉVÉNEMENTS DU BOUTON PRINCIPAL ---
 
-    // Clic Appui + Gestion de la Pression Prolongée (Jour 4)
+    // Clic Appui + Gestion de la Pression Prolongée
     starter.addEventListener('mousedown', function() {
-        ajouterBonbons(1); // <-- Corrigé : ajouterBonbons(1) au lieu de ajouterBonbon()
+        ajouterBonbons(1); 
 
         if (holdUnlocked && !holdInterval) {
             holdInterval = setInterval(() => ajouterBonbons(1), 150);
@@ -91,9 +95,9 @@ document.addEventListener('DOMContentLoaded', function () {
         stopperMaintien();
     });
 
-    // Entrée du curseur 
+    // Entrée du curseur
     starter.addEventListener('mouseenter', function() {
-        if (enterUnlocked) ajouterBonbons(1);
+        ajouterBonbons(enterLvl);
     });
 
     // Sortie du curseur + Stop maintien
@@ -115,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- ACHATS EN BOUTIQUE ---
 
-    // Achat : Relâchement (JOUR 1)
+    // Achat : Relâchement 
     buyReleaseBtn.addEventListener('click', function() {
         if (candyCounter >= releaseCost) {
             candyCounter -= releaseCost;
@@ -125,13 +129,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat : Entrée du bouton
+    // Achat : Entrée du bouton 
     buyEnterBtn.addEventListener('click', function() {
-        if (candyCounter >= enterCost && !enterUnlocked) {
+        if (candyCounter >= enterCost) {
             candyCounter -= enterCost;
-            enterUnlocked = true;
-            buyEnterBtn.innerText = 'Entrée du bouton : Activée ✔️';
-            buyEnterBtn.disabled = true;
+            enterLvl++;
+            enterCost = Math.floor(enterCost * 1.5);
             maintienAffichage();
         }
     });
