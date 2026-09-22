@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
         releaseLvl = 0, 
         enterLvl = 0,
-        leaveUnlocked = false,
+        leaveLvl = 0,
         holdUnlocked = false,
         releaseCost = 100,
         enterCost = 50,
@@ -61,7 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('lvl-enter').innerText = enterLvl;
             document.getElementById('cost-enter').innerText = enterCost;
         }
-        if (!leaveUnlocked) buyLeaveBtn.disabled = candyCounter < leaveCost;
+        buyLeaveBtn.disabled = candyCounter < leaveCost;
+        if (document.getElementById('lvl-leave')) {
+            document.getElementById('lvl-leave').innerText = leaveLvl;
+            document.getElementById('cost-leave').innerText = leaveCost;
+        }
         if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
         if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
         if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
@@ -102,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Sortie du curseur + Stop maintien
     starter.addEventListener('mouseleave', function() {
-        if (leaveUnlocked) ajouterBonbons(1);
+        ajouterBonbons(leaveLvl);
         stopperMaintien();
     });
 
@@ -141,11 +145,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Achat : Sortie du bouton
     buyLeaveBtn.addEventListener('click', function() {
-        if (candyCounter >= leaveCost && !leaveUnlocked) {
+        if (candyCounter >= leaveCost) {
             candyCounter -= leaveCost;
-            leaveUnlocked = true;
-            buyLeaveBtn.innerText = 'Sortie du bouton : Activée ✔️';
-            buyLeaveBtn.disabled = true;
+            leaveLvl++;
+            leaveCost = Math.floor(leaveCost * 1.5);
             maintienAffichage();
         }
     });
