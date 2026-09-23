@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         releaseLvl = 0, 
         enterLvl = 0,
         leaveLvl = 0,
-        holdUnlocked = false,
+        holdLvl = 0,
         releaseCost = 100,
         enterCost = 50,
         leaveCost = 50,
@@ -55,18 +55,26 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('cost-release').innerText = releaseCost;
         }
 
-        // Anciens boutons 
         buyEnterBtn.disabled = candyCounter < enterCost;
         if (document.getElementById('lvl-enter')) {
             document.getElementById('lvl-enter').innerText = enterLvl;
             document.getElementById('cost-enter').innerText = enterCost;
         }
+
         buyLeaveBtn.disabled = candyCounter < leaveCost;
         if (document.getElementById('lvl-leave')) {
             document.getElementById('lvl-leave').innerText = leaveLvl;
             document.getElementById('cost-leave').innerText = leaveCost;
         }
-        if (!holdUnlocked) buyHoldBtn.disabled = candyCounter < holdCost;
+
+        buyHoldBtn.disabled = candyCounter < holdCost;
+        if (document.getElementById('lvl-hold')) {
+            document.getElementById('lvl-hold').innerText = holdLvl;
+            document.getElementById('cost-hold').innerText = holdCost;
+        }
+
+                // Anciens boutons 
+        
         if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
         if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
         if (!wheelUnlocked) buyWheelBtn.disabled = candyCounter < wheelCost;
@@ -86,14 +94,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clic Appui + Gestion de la Pression Prolongée
     starter.addEventListener('mousedown', function() {
-        ajouterBonbons(1); 
+        ajouterBonbons(1); // Le clic manuel de base donne toujours 1 bonbon
 
-        if (holdUnlocked && !holdInterval) {
-            holdInterval = setInterval(() => ajouterBonbons(1), 150);
+        // Si Pression Prolongée est au moins Niv. 1
+        if (holdLvl > 0 && !holdInterval) {
+            holdInterval = setInterval(function() {
+                ajouterBonbons(holdLvl);
+            }, 150);
         }
     });
 
-    // Relâchement + Stop maintien (JOUR 1)
+    // Relâchement + Stop maintien 
     starter.addEventListener('mouseup', function() {
         ajouterBonbons(releaseLvl); // Ajoute le montant du niveau de relâchement
         stopperMaintien();
@@ -155,11 +166,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Achat : Pression Prolongée
     buyHoldBtn.addEventListener('click', function() {
-        if (candyCounter >= holdCost && !holdUnlocked) {
+        if (candyCounter >= holdCost) {
             candyCounter -= holdCost;
-            holdUnlocked = true;
-            buyHoldBtn.innerText = 'Pression Prolongée : Activée ✔️';
-            buyHoldBtn.disabled = true;
+            holdLvl++;
+            holdCost = Math.floor(holdCost * 1.5);
             maintienAffichage();
         }
     });
