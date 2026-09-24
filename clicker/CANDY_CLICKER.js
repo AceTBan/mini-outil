@@ -18,17 +18,17 @@ document.addEventListener('DOMContentLoaded', function () {
         enterLvl = 0,
         leaveLvl = 0,
         holdLvl = 0,
+        wheelLvl = 0,
         releaseCost = 100,
         enterCost = 50,
         leaveCost = 50,
         holdCost = 200,
+        wheelCost = 200,
         holdInterval = null,
         moveUnlocked = false,
         autoUnlocked = false,
         moveCost = 400,
-        autoCost = 800,
-        wheelUnlocked = false,
-        wheelCost = 200;
+        autoCost = 800;
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -48,41 +48,49 @@ document.addEventListener('DOMContentLoaded', function () {
     function maintienAffichage() {
         output.innerHTML = 'Vous avez ' + candyCounter + ' candy ! ';
         
-        // Mise à jour de la boutique 
+        // Release 
         buyReleaseBtn.disabled = candyCounter < releaseCost;
         if (document.getElementById('lvl-release')) {
             document.getElementById('lvl-release').innerText = releaseLvl;
             document.getElementById('cost-release').innerText = releaseCost;
         }
 
+        // Enter 
         buyEnterBtn.disabled = candyCounter < enterCost;
         if (document.getElementById('lvl-enter')) {
             document.getElementById('lvl-enter').innerText = enterLvl;
             document.getElementById('cost-enter').innerText = enterCost;
         }
 
+        // Leave 
         buyLeaveBtn.disabled = candyCounter < leaveCost;
         if (document.getElementById('lvl-leave')) {
             document.getElementById('lvl-leave').innerText = leaveLvl;
             document.getElementById('cost-leave').innerText = leaveCost;
         }
 
+        // Hold 
         buyHoldBtn.disabled = candyCounter < holdCost;
         if (document.getElementById('lvl-hold')) {
             document.getElementById('lvl-hold').innerText = holdLvl;
             document.getElementById('cost-hold').innerText = holdCost;
         }
 
-                // Anciens boutons 
+        // Wheel 
+        buyWheelBtn.disabled = candyCounter < wheelCost;
+        if (document.getElementById('lvl-wheel')) {
+            document.getElementById('lvl-wheel').innerText = wheelLvl;
+            document.getElementById('cost-wheel').innerText = wheelCost;
+        }
         
+        // Anciens boutons (Move / Auto)
         if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
         if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
-        if (!wheelUnlocked) buyWheelBtn.disabled = candyCounter < wheelCost;
 
         localStorage.setItem('candyScore', candyCounter);
     }
 
-    // Stop le timer du clic maintenu quand on relâche ou qu'on sort du bouton
+    // Stop le timer du clic maintenu
     function stopperMaintien() {
         if (holdInterval) {
             clearInterval(holdInterval);
@@ -92,11 +100,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- ÉVÉNEMENTS DU BOUTON PRINCIPAL ---
 
-    // Clic Appui + Gestion de la Pression Prolongée
+    // Clic Appui + Pression Prolongée
     starter.addEventListener('mousedown', function() {
-        ajouterBonbons(1); // Le clic manuel de base donne toujours 1 bonbon
+        ajouterBonbons(1);
 
-        // Si Pression Prolongée est au moins Niv. 1
         if (holdLvl > 0 && !holdInterval) {
             holdInterval = setInterval(function() {
                 ajouterBonbons(holdLvl);
@@ -104,9 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Relâchement + Stop maintien 
+    // Relâchement
     starter.addEventListener('mouseup', function() {
-        ajouterBonbons(releaseLvl); // Ajoute le montant du niveau de relâchement
+        ajouterBonbons(releaseLvl);
         stopperMaintien();
     });
 
@@ -115,18 +122,26 @@ document.addEventListener('DOMContentLoaded', function () {
         ajouterBonbons(enterLvl);
     });
 
-    // Sortie du curseur + Stop maintien
+    // Sortie du curseur
     starter.addEventListener('mouseleave', function() {
         ajouterBonbons(leaveLvl);
         stopperMaintien();
     });
 
-    // Survol Turbo (Pixel par pixel)
+    // Survol Turbo
     starter.addEventListener('mousemove', function() {
         if (moveUnlocked) ajouterBonbons(1);
     });
 
-    // Auto-Clicker Passif
+    // Action Molette (J5)
+    starter.addEventListener('wheel', function(e) {
+        if (wheelLvl > 0) {
+            e.preventDefault();
+            ajouterBonbons(wheelLvl);
+        }
+    });
+
+    // Auto-Clicker Passif (Corrigé)
     setInterval(function() {
         if (autoUnlocked) ajouterBonbons(1);
     }, 1000);
@@ -134,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- ACHATS EN BOUTIQUE ---
 
-    // Achat : Relâchement 
+    // Achat : Relâchement
     buyReleaseBtn.addEventListener('click', function() {
         if (candyCounter >= releaseCost) {
             candyCounter -= releaseCost;
@@ -144,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat : Entrée du bouton 
+    // Achat : Entrée du bouton
     buyEnterBtn.addEventListener('click', function() {
         if (candyCounter >= enterCost) {
             candyCounter -= enterCost;
@@ -174,7 +189,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat Survol Turbo
+    // Achat : Action Molette (J5 - Corrigé)
+    buyWheelBtn.addEventListener('click', function() {
+        if (candyCounter >= wheelCost) {
+            candyCounter -= wheelCost;
+            wheelLvl++;
+            wheelCost = Math.floor(wheelCost * 1.5);
+            maintienAffichage();
+        }
+    });
+
+    // Achat : Survol Turbo
     buyMoveBtn.addEventListener('click', function() {
         if (candyCounter >= moveCost && !moveUnlocked) {
             candyCounter -= moveCost;
@@ -185,29 +210,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat Auto-Clicker Passif
+    // Achat : Auto-Clicker Passif
     buyAutoBtn.addEventListener('click', function() {
         if (candyCounter >= autoCost && !autoUnlocked) {
             candyCounter -= autoCost;
             autoUnlocked = true;
             buyAutoBtn.innerText = 'Auto-Clicker : Activé ✔️';
             buyAutoBtn.disabled = true;
-            maintienAffichage();
-        }
-    });
-
-    // Événement molette sur le bouton
-    starter.addEventListener('wheel', function() {
-        if (wheelUnlocked) ajouterBonbons(1);
-    });
-
-    // Achat boutique Molette
-    buyWheelBtn.addEventListener('click', function() {
-        if (candyCounter >= wheelCost && !wheelUnlocked) {
-            candyCounter -= wheelCost;
-            wheelUnlocked = true;
-            buyWheelBtn.innerText = 'Action Molette : Activée ✔️';
-            buyWheelBtn.disabled = true;
             maintienAffichage();
         }
     });
