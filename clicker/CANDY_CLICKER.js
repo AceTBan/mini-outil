@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         holdCost = 200,
         wheelCost = 200,
         holdInterval = null,
-        moveUnlocked = false,
+        moveLvl = 0,
         autoUnlocked = false,
         moveCost = 400,
         autoCost = 800;
@@ -82,9 +82,13 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('lvl-wheel').innerText = wheelLvl;
             document.getElementById('cost-wheel').innerText = wheelCost;
         }
-        
-        // Anciens boutons (Move / Auto)
-        if (!moveUnlocked) buyMoveBtn.disabled = candyCounter < moveCost;
+        // Move
+        buyMoveBtn.disabled = candyCounter < moveCost;
+        if (document.getElementById('lvl-move')) {
+            document.getElementById('lvl-move').innerText = moveLvl;
+            document.getElementById('cost-move').innerText = moveCost;
+        }
+        // Anciens boutons (Auto)
         if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
 
         localStorage.setItem('candyScore', candyCounter);
@@ -130,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Survol Turbo
     starter.addEventListener('mousemove', function() {
-        if (moveUnlocked) ajouterBonbons(1);
+        ajouterBonbons(moveLvl);
     });
 
     // Action Molette (J5)
@@ -189,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Achat : Action Molette (J5 - Corrigé)
+    // Achat : Action Molette
     buyWheelBtn.addEventListener('click', function() {
         if (candyCounter >= wheelCost) {
             candyCounter -= wheelCost;
@@ -201,11 +205,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Achat : Survol Turbo
     buyMoveBtn.addEventListener('click', function() {
-        if (candyCounter >= moveCost && !moveUnlocked) {
+        if (candyCounter >= moveCost) {
             candyCounter -= moveCost;
-            moveUnlocked = true;
-            buyMoveBtn.innerText = 'Survol Turbo : Activé ✔️';
-            buyMoveBtn.disabled = true;
+            moveLvl++;
+            moveCost = Math.floor(moveCost * 1.5);
             maintienAffichage();
         }
     });
