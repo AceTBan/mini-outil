@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         wheelCost = 200,
         holdInterval = null,
         moveLvl = 0,
-        autoUnlocked = false,
+        autoLvl = 0,
         moveCost = 400,
         autoCost = 800;
 
@@ -88,8 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('lvl-move').innerText = moveLvl;
             document.getElementById('cost-move').innerText = moveCost;
         }
-        // Anciens boutons (Auto)
-        if (!autoUnlocked) buyAutoBtn.disabled = candyCounter < autoCost;
+        // Auto
+        buyAutoBtn.disabled = candyCounter < autoCost;
+        if (document.getElementById('lvl-auto')) {
+            document.getElementById('lvl-auto').innerText = autoLvl;
+            document.getElementById('cost-auto').innerText = autoCost;
+        }
 
         localStorage.setItem('candyScore', candyCounter);
     }
@@ -137,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ajouterBonbons(moveLvl);
     });
 
-    // Action Molette (J5)
+    // Action Molette 
     starter.addEventListener('wheel', function(e) {
         if (wheelLvl > 0) {
             e.preventDefault();
@@ -145,11 +149,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Auto-Clicker Passif (Corrigé)
+    // Auto-Clicker Passif 
     setInterval(function() {
-        if (autoUnlocked) ajouterBonbons(1);
+        ajouterBonbons(autoLvl);
     }, 1000);
-
 
     // --- ACHATS EN BOUTIQUE ---
 
@@ -215,11 +218,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Achat : Auto-Clicker Passif
     buyAutoBtn.addEventListener('click', function() {
-        if (candyCounter >= autoCost && !autoUnlocked) {
+        if (candyCounter >= autoCost) {
             candyCounter -= autoCost;
-            autoUnlocked = true;
-            buyAutoBtn.innerText = 'Auto-Clicker : Activé ✔️';
-            buyAutoBtn.disabled = true;
+            autoLvl++;
+            autoCost = Math.floor(autoCost * 1.5);
             maintienAffichage();
         }
     });
