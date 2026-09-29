@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
         buyHoldBtn = document.querySelector('#buy-hold'),
         buyMoveBtn = document.querySelector('#buy-move'),
         buyAutoBtn = document.querySelector('#buy-auto'),
-        buyWheelBtn = document.querySelector('#buy-wheel');
+        buyWheelBtn = document.querySelector('#buy-wheel'),
+        buyClickBtn = document.querySelector('#buy-click');
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
@@ -28,7 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
         moveLvl = 0,
         autoLvl = 0,
         moveCost = 400,
-        autoCost = 800;
+        autoCost = 800,
+        clickLvl = 1,
+        clickCost = 15;
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -95,6 +98,12 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('cost-auto').innerText = autoCost;
         }
 
+        buyClickBtn.disabled = candyCounter < clickCost;
+        if (document.getElementById('lvl-click')) {
+            document.getElementById('lvl-click').innerText = clickLvl;
+            document.getElementById('cost-click').innerText = clickCost;
+        }
+
         localStorage.setItem('candyScore', candyCounter);
     }
 
@@ -146,6 +155,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (wheelLvl > 0) {
             e.preventDefault();
             ajouterBonbons(wheelLvl);
+        }
+    });
+
+    starter.addEventListener('mousedown', function() {
+    ajouterBonbons(clickLvl); // <-- Utilise la puissance de clic au lieu de 1 fixe !
+
+        if (holdLvl > 0 && !holdInterval) {
+            holdInterval = setInterval(function() {
+                ajouterBonbons(holdLvl);
+            }, 150);
         }
     });
 
@@ -225,4 +244,14 @@ document.addEventListener('DOMContentLoaded', function () {
             maintienAffichage();
         }
     });
+
+    buyClickBtn.addEventListener('click', function() {
+        if (candyCounter >= clickCost) {
+            candyCounter -= clickCost;
+            clickLvl++;
+            clickCost = Math.floor(clickCost * 1.5);
+            maintienAffichage();
+        }
+    });
+
 });
