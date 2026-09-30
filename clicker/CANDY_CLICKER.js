@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 1. Sélection des éléments HTML
     let output = document.querySelector('#output'),
         starter = document.querySelector('#starter'),
+        cpsSpan = document.querySelector('#cps'),
         buyReleaseBtn = document.querySelector('#buy-release'),
         buyEnterBtn = document.querySelector('#buy-enter'),
         buyLeaveBtn = document.querySelector('#buy-leave'),
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
+        derniersBonbons = candyCounter, // Sauvegarde le score d'il y a 1 seconde
         releaseLvl = 0, 
         enterLvl = 0,
         leaveLvl = 0,
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         moveCost = 400,
         autoCost = 800,
         clickLvl = 1,
-        clickCost = 15;
+        clickCost = 25;
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -159,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     starter.addEventListener('mousedown', function() {
-    ajouterBonbons(clickLvl); // <-- Utilise la puissance de clic au lieu de 1 fixe !
 
         if (holdLvl > 0 && !holdInterval) {
             holdInterval = setInterval(function() {
@@ -254,4 +255,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+
+    // Calcul du nombre de bonbons par seconde (CPS)
+    setInterval(function() {
+        let bonbonsGagnes = candyCounter - derniersBonbons;
+        cpsSpan.innerText = bonbonsGagnes;
+        derniersBonbons = candyCounter; // Remet à jour pour la seconde suivante
+    }, 1000);
+    
 });
