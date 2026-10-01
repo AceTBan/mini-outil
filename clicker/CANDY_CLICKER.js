@@ -39,16 +39,31 @@ document.addEventListener('DOMContentLoaded', function () {
     function ajouterBonbons(quantite) {
         if (quantite <= 0) return;
         candyCounter += quantite;
+        // Le gain est multiplié par 5 si le boost est actif
+        let gainTotal = quantite * cpsMultiplier;
+        candyCounter += gainTotal;
         maintienAffichage();
 
+        // Animation textuelle (+5 🍬 au lieu de +1 🍬)
         let pop = document.createElement('span');
         pop.innerText = ' +' + quantite + ' 🍬';
         pop.className = 'pop-animation';
         output.appendChild(pop);
         
+        if (cpsMultiplier > 1) pop.style.color = "gold"; // Visuel doré pendant le boost
+
+        if (event && event.clientX) {
+            pop.style.left = event.clientX + 'px';
+            pop.style.top = event.clientY + 'px';
+        } else if (starter) {
+            let rect = starter.getBoundingClientRect();
+            pop.style.left = (rect.left + rect.width / 2) + 'px';
+            pop.style.top = (rect.top + rect.height / 2) + 'px';
+        }
+
+        document.body.appendChild(pop);
         setTimeout(() => pop.remove(), 800);
     }
-
     // 4. Mise à jour de l'affichage et de l'état des boutons
     function maintienAffichage() {
         output.innerHTML = 'Vous avez ' + candyCounter + ' candy ! ';
@@ -263,4 +278,57 @@ document.addEventListener('DOMContentLoaded', function () {
         derniersBonbons = candyCounter; // Remet à jour pour la seconde suivante
     }, 1000);
     
+                                        // --- SYSTÈME DU BONBON DORÉ (CORRIGÉ) ---
+
+let goldenCandy = document.querySelector('#golden-candy'),
+    cpsMultiplier = 1; // Multiplicateur (1 par défaut, 5 pendant le boost)
+
+// 1. Apparition du Bonbon Doré
+function apparaitreBonbonDore() {
+    if (!goldenCandy) return;
+
+    let x = Math.random() * (window.innerWidth - 120);
+    let y = Math.random() * (window.innerHeight - 120);
+
+    goldenCandy.style.left = Math.max(20, x) + 'px';
+    goldenCandy.style.top = Math.max(20, y) + 'px';
+    goldenCandy.classList.remove('hidden');
+
+    // Disparaît au bout de 6 secondes si non cliqué
+    setTimeout(() => {
+        goldenCandy.classList.add('hidden');
+    }, 6000);
+}
+
+// 2. Clic sur le Bonbon Doré
+if (goldenCandy) {
+    goldenCandy.addEventListener('click', function() {
+        goldenCandy.classList.add('hidden');
+
+        // Activation du Boost x5
+        cpsMultiplier = 5;
+        
+        // Effet visuel immédiat sur le bouton principal
+        starter.style.boxShadow = "0 0 25px gold";
+        starter.style.transform = "scale(1.05)";
+
+        // Désactivation du boost après 10 secondes
+        setTimeout(() => {
+            cpsMultiplier = 1;
+            starter.style.boxShadow = "none";
+            starter.style.transform = "scale(1)";
+        }, 10000);
+    });
+}
+
+// 3. Boucle d'apparition aléatoire (toutes les 45s à 90s)
+function programmerBonbonDore() {
+    let tempsAleatoire = Math.random() * (90000 - 45000) + 45000;
+    setTimeout(() => {
+        apparaitreBonbonDore();
+        programmerBonbonDore();
+    }, tempsAleatoire);
+}
+programmerBonbonDore();
+
 });

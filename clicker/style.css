@@ -1,0 +1,24 @@
+/* Bonbon Doré */
+#golden-candy {
+    position: fixed;
+    font-size: 3rem;
+    cursor: pointer;
+    user-select: none;
+    z-index: 1000;
+    animation: pulse 1s infinite alternate, float 2s infinite ease-in-out;
+    filter: drop-shadow(0 0 10px gold);
+    transition: transform 0.1s ease;
+}
+
+#golden-candy:hover {
+    transform: scale(1.2);
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
