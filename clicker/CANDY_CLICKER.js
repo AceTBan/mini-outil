@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
         buyMoveBtn = document.querySelector('#buy-move'),
         buyAutoBtn = document.querySelector('#buy-auto'),
         buyWheelBtn = document.querySelector('#buy-wheel'),
-        buyClickBtn = document.querySelector('#buy-click');
+        buyClickBtn = document.querySelector('#buy-click'),
+        buyMarmiteBtn = document.querySelector('#buy-marmite');
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
@@ -33,7 +34,9 @@ document.addEventListener('DOMContentLoaded', function () {
         moveCost = 400,
         autoCost = 800,
         clickLvl = 1,
-        clickCost = 25;
+        clickCost = 25,
+        marmiteLvl = 0,
+        marmiteCost = 1500;
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -122,6 +125,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         localStorage.setItem('candyScore', candyCounter);
+
+        // Marmite
+        if (buyMarmiteBtn) buyMarmiteBtn.disabled = candyCounter < marmiteCost;
+        if (document.getElementById('lvl-marmite')) {
+            document.getElementById('lvl-marmite').innerText = marmiteLvl;
+            document.getElementById('cost-marmite').innerText = marmiteCost;
+        }
+        
     }
 
     // Stop le timer du clic maintenu
@@ -184,9 +195,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Auto-Clicker Passif 
+    // Production automatique (Auto + Marmite)
     setInterval(function() {
-        ajouterBonbons(autoLvl);
+        let valeurDeBase = 5; // <-- mettre le nombre de bonbons par niveau
+        let gainPassif = (autoLvl + marmiteLvl) * valeurDeBase;
+        if (gainPassif > 0) {
+            ajouterBonbons(gainPassif);
+        }
     }, 1000);
 
     // --- ACHATS EN BOUTIQUE ---
@@ -270,6 +285,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Achat : Marmite à Bonbons
+    if (buyMarmiteBtn) {
+        buyMarmiteBtn.addEventListener('click', function() {
+            if (candyCounter >= marmiteCost) {
+                candyCounter -= marmiteCost;
+                marmiteLvl++;
+                marmiteCost = Math.floor(marmiteCost * 2);
+                maintienAffichage();
+            }
+        });
+    }
 
     // Calcul du nombre de bonbons par seconde (CPS)
     setInterval(function() {
