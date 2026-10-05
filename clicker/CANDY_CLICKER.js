@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
         buyAutoBtn = document.querySelector('#buy-auto'),
         buyWheelBtn = document.querySelector('#buy-wheel'),
         buyClickBtn = document.querySelector('#buy-click'),
-        buyMarmiteBtn = document.querySelector('#buy-marmite');
+        buyMarmiteBtn = document.querySelector('#buy-marmite'),
+        buyUsineBtn = document.querySelector('#buy-usine');
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
@@ -36,7 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
         clickLvl = 1,
         clickCost = 25,
         marmiteLvl = 0,
-        marmiteCost = 1500;
+        marmiteCost = 1500,
+        usineLvl = 0,
+        usineCost = 10000;
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -133,6 +136,12 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('cost-marmite').innerText = marmiteCost;
         }
         
+        // Usine
+        if (buyUsineBtn) buyUsineBtn.disabled = candyCounter < usineCost;
+        if (document.getElementById('lvl-usine')) {
+            document.getElementById('lvl-usine').innerText = usineLvl;
+            document.getElementById('cost-usine').innerText = usineCost;
+        }
     }
 
     // Stop le timer du clic maintenu
@@ -199,6 +208,14 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(function() {
         let valeurDeBase = 5; // <-- mettre le nombre de bonbons par niveau
         let gainPassif = (autoLvl + marmiteLvl) * valeurDeBase;
+        if (gainPassif > 0) {
+            ajouterBonbons(gainPassif);
+        }
+    }, 1000);
+
+    // Production automatique
+    setInterval(function() {
+        let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30);
         if (gainPassif > 0) {
             ajouterBonbons(gainPassif);
         }
@@ -295,6 +312,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 maintienAffichage();
             }
         });
+
+    // Achat : Usine à Bonbons
+    if (buyUsineBtn) {
+        buyUsineBtn.addEventListener('click', function() {
+            if (candyCounter >= usineCost) {
+                candyCounter -= usineCost;
+                usineLvl++;
+                usineCost = Math.floor(usineCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
     }
 
     // Calcul du nombre de bonbons par seconde (CPS)
