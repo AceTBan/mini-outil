@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
         buyWheelBtn = document.querySelector('#buy-wheel'),
         buyClickBtn = document.querySelector('#buy-click'),
         buyMarmiteBtn = document.querySelector('#buy-marmite'),
-        buyUsineBtn = document.querySelector('#buy-usine');
+        buyUsineBtn = document.querySelector('#buy-usine'),
+        buyLaboBtn = document.querySelector('#buy-labo');
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
@@ -39,7 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
         marmiteLvl = 0,
         marmiteCost = 1500,
         usineLvl = 0,
-        usineCost = 10000;
+        usineCost = 10000,
+        laboLvl = 0,
+        laboCost = 75000;
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -142,6 +145,13 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('lvl-usine').innerText = usineLvl;
             document.getElementById('cost-usine').innerText = usineCost;
         }
+
+        // Laboratoire
+        if (buyLaboBtn) buyLaboBtn.disabled = candyCounter < laboCost;
+        if (document.getElementById('lvl-labo')) {
+            document.getElementById('lvl-labo').innerText = laboLvl;
+            document.getElementById('cost-labo').innerText = laboCost;
+        }
     }
 
     // Stop le timer du clic maintenu
@@ -216,6 +226,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Production automatique
     setInterval(function() {
         let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30);
+        if (gainPassif > 0) {
+            ajouterBonbons(gainPassif);
+        }
+    }, 1000);
+
+    setInterval(function() {
+        let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30) + (laboLvl * 200);
         if (gainPassif > 0) {
             ajouterBonbons(gainPassif);
         }
@@ -319,10 +336,23 @@ document.addEventListener('DOMContentLoaded', function () {
             if (candyCounter >= usineCost) {
                 candyCounter -= usineCost;
                 usineLvl++;
-                usineCost = Math.floor(usineCost * 1.5);
+                usineCost = Math.floor(usineCost * 2);
                 maintienAffichage();
             }
         });
+
+    // Achat : Laboratoire à Bonbons
+    if (buyLaboBtn) {
+        buyLaboBtn.addEventListener('click', function() {
+            if (candyCounter >= laboCost) {
+                candyCounter -= laboCost;
+                laboLvl++;
+                laboCost = Math.floor(laboCost * 2);
+                maintienAffichage();
+            }
+        });
+    }
+
     }
     }
 
