@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
         buyClickBtn = document.querySelector('#buy-click'),
         buyMarmiteBtn = document.querySelector('#buy-marmite'),
         buyUsineBtn = document.querySelector('#buy-usine'),
-        buyLaboBtn = document.querySelector('#buy-labo');
+        buyLaboBtn = document.querySelector('#buy-labo'),
+        buyMineBtn = document.querySelector('#buy-mine');
 
     // 2. Variables d'état du jeu
     let candyCounter = parseInt(localStorage.getItem('candyScore')) || 0,
@@ -42,7 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
         usineLvl = 0,
         usineCost = 10000,
         laboLvl = 0,
-        laboCost = 75000;
+        laboCost = 75000,
+        mineLvl = 0,
+        mineCost = 500000;
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -152,6 +155,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('lvl-labo').innerText = laboLvl;
             document.getElementById('cost-labo').innerText = laboCost;
         }
+
+        // Mine
+        if (buyMineBtn) buyMineBtn.disabled = candyCounter < mineCost;
+        if (document.getElementById('lvl-mine')) {
+            document.getElementById('lvl-mine').innerText = mineLvl;
+            document.getElementById('cost-mine').innerText = mineCost;
+        }
+
     }
 
     // Stop le timer du clic maintenu
@@ -233,6 +244,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setInterval(function() {
         let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30) + (laboLvl * 200);
+        if (gainPassif > 0) {
+            ajouterBonbons(gainPassif);
+        }
+    }, 1000);
+
+    setInterval(function() {
+        let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30) + (laboLvl * 200) + (mineLvl * 1500);
         if (gainPassif > 0) {
             ajouterBonbons(gainPassif);
         }
@@ -352,7 +370,17 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
+    // Achat : Mine à Bonbons
+    if (buyMineBtn) {
+        buyMineBtn.addEventListener('click', function() {
+            if (candyCounter >= mineCost) {
+                candyCounter -= mineCost;
+                mineLvl++;
+                mineCost = Math.floor(mineCost * 2);
+                maintienAffichage();
+            }
+        });
+    }
     }
     }
 
