@@ -53,21 +53,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
         if (quantite <= 0) return;
-        candyCounter += quantite;
-        // Le gain est multiplié par 5 si le boost est actif
+        
+        // Calcul du gain réel avec le multiplicateur
         let gainTotal = quantite * cpsMultiplier;
         candyCounter += gainTotal;
         maintienAffichage();
 
-        // Animation textuelle (+5 🍬 au lieu de +1 🍬)
+        // Animation textuelle avec affichage formraté avec des points (.)
         let pop = document.createElement('span');
-        pop.innerText = ' +' + quantite + ' 🍬';
+        pop.innerText = ' +' + gainTotal.toLocaleString('de-DE') + ' 🍬';
         pop.className = 'pop-animation';
         output.appendChild(pop);
         
         if (cpsMultiplier > 1) pop.style.color = "gold"; // Visuel doré pendant le boost
 
-        if (event && event.clientX) {
+        if (typeof event !== 'undefined' && event && event.clientX) {
             pop.style.left = event.clientX + 'px';
             pop.style.top = event.clientY + 'px';
         } else if (starter) {
@@ -79,61 +79,65 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(pop);
         setTimeout(() => pop.remove(), 800);
     }
-    // 4. Mise à jour de l'affichage et de l'état des boutons
+
+    // 4. Mise à jour de l'affichage et de l'état des boutons 
     function maintienAffichage() {
-        output.innerHTML = 'Vous avez ' + candyCounter + ' candy ! ';
+        output.innerHTML = 'Vous avez ' + candyCounter.toLocaleString('de-DE') + ' candy ! ';
         
         // Release 
-        buyReleaseBtn.disabled = candyCounter < releaseCost;
+        if (buyReleaseBtn) buyReleaseBtn.disabled = candyCounter < releaseCost;
         if (document.getElementById('lvl-release')) {
             document.getElementById('lvl-release').innerText = releaseLvl;
-            document.getElementById('cost-release').innerText = releaseCost;
+            document.getElementById('cost-release').innerText = releaseCost.toLocaleString('de-DE');
         }
 
         // Enter 
-        buyEnterBtn.disabled = candyCounter < enterCost;
+        if (buyEnterBtn) buyEnterBtn.disabled = candyCounter < enterCost;
         if (document.getElementById('lvl-enter')) {
             document.getElementById('lvl-enter').innerText = enterLvl;
-            document.getElementById('cost-enter').innerText = enterCost;
+            document.getElementById('cost-enter').innerText = enterCost.toLocaleString('de-DE');
         }
 
         // Leave 
-        buyLeaveBtn.disabled = candyCounter < leaveCost;
+        if (buyLeaveBtn) buyLeaveBtn.disabled = candyCounter < leaveCost;
         if (document.getElementById('lvl-leave')) {
             document.getElementById('lvl-leave').innerText = leaveLvl;
-            document.getElementById('cost-leave').innerText = leaveCost;
+            document.getElementById('cost-leave').innerText = leaveCost.toLocaleString('de-DE');
         }
 
         // Hold 
-        buyHoldBtn.disabled = candyCounter < holdCost;
+        if (buyHoldBtn) buyHoldBtn.disabled = candyCounter < holdCost;
         if (document.getElementById('lvl-hold')) {
             document.getElementById('lvl-hold').innerText = holdLvl;
-            document.getElementById('cost-hold').innerText = holdCost;
+            document.getElementById('cost-hold').innerText = holdCost.toLocaleString('de-DE');
         }
 
         // Wheel 
-        buyWheelBtn.disabled = candyCounter < wheelCost;
+        if (buyWheelBtn) buyWheelBtn.disabled = candyCounter < wheelCost;
         if (document.getElementById('lvl-wheel')) {
             document.getElementById('lvl-wheel').innerText = wheelLvl;
-            document.getElementById('cost-wheel').innerText = wheelCost;
-        }
-        // Move
-        buyMoveBtn.disabled = candyCounter < moveCost;
-        if (document.getElementById('lvl-move')) {
-            document.getElementById('lvl-move').innerText = moveLvl;
-            document.getElementById('cost-move').innerText = moveCost;
-        }
-        // Auto
-        buyAutoBtn.disabled = candyCounter < autoCost;
-        if (document.getElementById('lvl-auto')) {
-            document.getElementById('lvl-auto').innerText = autoLvl;
-            document.getElementById('cost-auto').innerText = autoCost;
+            document.getElementById('cost-wheel').innerText = wheelCost.toLocaleString('de-DE');
         }
 
-        buyClickBtn.disabled = candyCounter < clickCost;
+        // Move
+        if (buyMoveBtn) buyMoveBtn.disabled = candyCounter < moveCost;
+        if (document.getElementById('lvl-move')) {
+            document.getElementById('lvl-move').innerText = moveLvl;
+            document.getElementById('cost-move').innerText = moveCost.toLocaleString('de-DE');
+        }
+
+        // Auto
+        if (buyAutoBtn) buyAutoBtn.disabled = candyCounter < autoCost;
+        if (document.getElementById('lvl-auto')) {
+            document.getElementById('lvl-auto').innerText = autoLvl;
+            document.getElementById('cost-auto').innerText = autoCost.toLocaleString('de-DE');
+        }
+
+        // Click
+        if (buyClickBtn) buyClickBtn.disabled = candyCounter < clickCost;
         if (document.getElementById('lvl-click')) {
             document.getElementById('lvl-click').innerText = clickLvl;
-            document.getElementById('cost-click').innerText = clickCost;
+            document.getElementById('cost-click').innerText = clickCost.toLocaleString('de-DE');
         }
 
         localStorage.setItem('candyScore', candyCounter);
@@ -142,37 +146,36 @@ document.addEventListener('DOMContentLoaded', function () {
         if (buyMarmiteBtn) buyMarmiteBtn.disabled = candyCounter < marmiteCost;
         if (document.getElementById('lvl-marmite')) {
             document.getElementById('lvl-marmite').innerText = marmiteLvl;
-            document.getElementById('cost-marmite').innerText = marmiteCost;
+            document.getElementById('cost-marmite').innerText = marmiteCost.toLocaleString('de-DE');
         }
         
         // Usine
         if (buyUsineBtn) buyUsineBtn.disabled = candyCounter < usineCost;
         if (document.getElementById('lvl-usine')) {
             document.getElementById('lvl-usine').innerText = usineLvl;
-            document.getElementById('cost-usine').innerText = usineCost;
+            document.getElementById('cost-usine').innerText = usineCost.toLocaleString('de-DE');
         }
 
         // Laboratoire
         if (buyLaboBtn) buyLaboBtn.disabled = candyCounter < laboCost;
         if (document.getElementById('lvl-labo')) {
             document.getElementById('lvl-labo').innerText = laboLvl;
-            document.getElementById('cost-labo').innerText = laboCost;
+            document.getElementById('cost-labo').innerText = laboCost.toLocaleString('de-DE');
         }
 
         // Mine
         if (buyMineBtn) buyMineBtn.disabled = candyCounter < mineCost;
         if (document.getElementById('lvl-mine')) {
             document.getElementById('lvl-mine').innerText = mineLvl;
-            document.getElementById('cost-mine').innerText = mineCost;
+            document.getElementById('cost-mine').innerText = mineCost.toLocaleString('de-DE');
         }
 
         // Fusée
         if (buyFuseeBtn) buyFuseeBtn.disabled = candyCounter < fuseeCost;
         if (document.getElementById('lvl-fusee')) {
             document.getElementById('lvl-fusee').innerText = fuseeLvl;
-            document.getElementById('cost-fusee').innerText = fuseeCost;
+            document.getElementById('cost-fusee').innerText = fuseeCost.toLocaleString('de-DE');
         }
-
     }
 
     // Stop le timer du clic maintenu
@@ -187,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clic Appui + Pression Prolongée
     starter.addEventListener('mousedown', function() {
-        ajouterBonbons(1);
+        ajouterBonbons(clickLvl);
 
         if (holdLvl > 0 && !holdInterval) {
             holdInterval = setInterval(function() {
@@ -226,48 +229,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    starter.addEventListener('mousedown', function() {
-
-        if (holdLvl > 0 && !holdInterval) {
-            holdInterval = setInterval(function() {
-                ajouterBonbons(holdLvl);
-            }, 150);
-        }
-    });
-
-    // Production automatique (Auto + Marmite)
+    // --- UNIQUE BOUCLE DE PRODUCTION AUTOMATIQUE ---
     setInterval(function() {
-        let valeurDeBase = 5; // <-- mettre le nombre de bonbons par niveau
-        let gainPassif = (autoLvl + marmiteLvl) * valeurDeBase;
-        if (gainPassif > 0) {
-            ajouterBonbons(gainPassif);
-        }
-    }, 1000);
+        let gainPassif = autoLvl 
+                       + (marmiteLvl * 5) 
+                       + (usineLvl * 30) 
+                       + (laboLvl * 200) 
+                       + (mineLvl * 1500) 
+                       + (fuseeLvl * 12000);
 
-    // Production automatique
-    setInterval(function() {
-        let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30);
-        if (gainPassif > 0) {
-            ajouterBonbons(gainPassif);
-        }
-    }, 1000);
-
-    setInterval(function() {
-        let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30) + (laboLvl * 200);
-        if (gainPassif > 0) {
-            ajouterBonbons(gainPassif);
-        }
-    }, 1000);
-
-    setInterval(function() {
-        let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30) + (laboLvl * 200) + (mineLvl * 1500);
-        if (gainPassif > 0) {
-            ajouterBonbons(gainPassif);
-        }
-    }, 1000);
-
-    setInterval(function() {
-        let gainPassif = autoLvl + (marmiteLvl * 5) + (usineLvl * 30) + (laboLvl * 200) + (mineLvl * 1500) + (fuseeLvl * 12000);
         if (gainPassif > 0) {
             ajouterBonbons(gainPassif);
         }
@@ -275,86 +245,94 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- ACHATS EN BOUTIQUE ---
 
-    // Achat : Relâchement
-    buyReleaseBtn.addEventListener('click', function() {
-        if (candyCounter >= releaseCost) {
-            candyCounter -= releaseCost;
-            releaseLvl++;
-            releaseCost = Math.floor(releaseCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyReleaseBtn) {
+        buyReleaseBtn.addEventListener('click', function() {
+            if (candyCounter >= releaseCost) {
+                candyCounter -= releaseCost;
+                releaseLvl++;
+                releaseCost = Math.floor(releaseCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    // Achat : Entrée du bouton
-    buyEnterBtn.addEventListener('click', function() {
-        if (candyCounter >= enterCost) {
-            candyCounter -= enterCost;
-            enterLvl++;
-            enterCost = Math.floor(enterCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyEnterBtn) {
+        buyEnterBtn.addEventListener('click', function() {
+            if (candyCounter >= enterCost) {
+                candyCounter -= enterCost;
+                enterLvl++;
+                enterCost = Math.floor(enterCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    // Achat : Sortie du bouton
-    buyLeaveBtn.addEventListener('click', function() {
-        if (candyCounter >= leaveCost) {
-            candyCounter -= leaveCost;
-            leaveLvl++;
-            leaveCost = Math.floor(leaveCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyLeaveBtn) {
+        buyLeaveBtn.addEventListener('click', function() {
+            if (candyCounter >= leaveCost) {
+                candyCounter -= leaveCost;
+                leaveLvl++;
+                leaveCost = Math.floor(leaveCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    // Achat : Pression Prolongée
-    buyHoldBtn.addEventListener('click', function() {
-        if (candyCounter >= holdCost) {
-            candyCounter -= holdCost;
-            holdLvl++;
-            holdCost = Math.floor(holdCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyHoldBtn) {
+        buyHoldBtn.addEventListener('click', function() {
+            if (candyCounter >= holdCost) {
+                candyCounter -= holdCost;
+                holdLvl++;
+                holdCost = Math.floor(holdCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    // Achat : Action Molette
-    buyWheelBtn.addEventListener('click', function() {
-        if (candyCounter >= wheelCost) {
-            candyCounter -= wheelCost;
-            wheelLvl++;
-            wheelCost = Math.floor(wheelCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyWheelBtn) {
+        buyWheelBtn.addEventListener('click', function() {
+            if (candyCounter >= wheelCost) {
+                candyCounter -= wheelCost;
+                wheelLvl++;
+                wheelCost = Math.floor(wheelCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    // Achat : Survol Turbo
-    buyMoveBtn.addEventListener('click', function() {
-        if (candyCounter >= moveCost) {
-            candyCounter -= moveCost;
-            moveLvl++;
-            moveCost = Math.floor(moveCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyMoveBtn) {
+        buyMoveBtn.addEventListener('click', function() {
+            if (candyCounter >= moveCost) {
+                candyCounter -= moveCost;
+                moveLvl++;
+                moveCost = Math.floor(moveCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    // Achat : Auto-Clicker Passif
-    buyAutoBtn.addEventListener('click', function() {
-        if (candyCounter >= autoCost) {
-            candyCounter -= autoCost;
-            autoLvl++;
-            autoCost = Math.floor(autoCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyAutoBtn) {
+        buyAutoBtn.addEventListener('click', function() {
+            if (candyCounter >= autoCost) {
+                candyCounter -= autoCost;
+                autoLvl++;
+                autoCost = Math.floor(autoCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    buyClickBtn.addEventListener('click', function() {
-        if (candyCounter >= clickCost) {
-            candyCounter -= clickCost;
-            clickLvl++;
-            clickCost = Math.floor(clickCost * 1.5);
-            maintienAffichage();
-        }
-    });
+    if (buyClickBtn) {
+        buyClickBtn.addEventListener('click', function() {
+            if (candyCounter >= clickCost) {
+                candyCounter -= clickCost;
+                clickLvl++;
+                clickCost = Math.floor(clickCost * 1.5);
+                maintienAffichage();
+            }
+        });
+    }
 
-    // Achat : Marmite à Bonbons
     if (buyMarmiteBtn) {
         buyMarmiteBtn.addEventListener('click', function() {
             if (candyCounter >= marmiteCost) {
@@ -364,8 +342,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 maintienAffichage();
             }
         });
+    }
 
-    // Achat : Usine à Bonbons
     if (buyUsineBtn) {
         buyUsineBtn.addEventListener('click', function() {
             if (candyCounter >= usineCost) {
@@ -375,8 +353,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 maintienAffichage();
             }
         });
+    }
 
-    // Achat : Laboratoire à Bonbons
     if (buyLaboBtn) {
         buyLaboBtn.addEventListener('click', function() {
             if (candyCounter >= laboCost) {
@@ -387,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    // Achat : Mine à Bonbons
+
     if (buyMineBtn) {
         buyMineBtn.addEventListener('click', function() {
             if (candyCounter >= mineCost) {
@@ -398,67 +376,74 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    }
+
+    if (buyFuseeBtn) {
+        buyFuseeBtn.addEventListener('click', function() {
+            if (candyCounter >= fuseeCost) {
+                candyCounter -= fuseeCost;
+                fuseeLvl++;
+                fuseeCost = Math.floor(fuseeCost * 2);
+                maintienAffichage();
+            }
+        });
     }
 
     // Calcul du nombre de bonbons par seconde (CPS)
     setInterval(function() {
         let bonbonsGagnes = candyCounter - derniersBonbons;
-        cpsSpan.innerText = bonbonsGagnes;
+        if (cpsSpan) cpsSpan.innerText = bonbonsGagnes.toLocaleString('de-DE');
         derniersBonbons = candyCounter; // Remet à jour pour la seconde suivante
     }, 1000);
-    
-                                        // --- SYSTÈME DU BONBON DORÉ (CORRIGÉ) ---
 
-let goldenCandy = document.querySelector('#golden-candy'),
-    cpsMultiplier = 1; // Multiplicateur (1 par défaut, 5 pendant le boost)
+    // --- SYSTÈME DU BONBON DORÉ ---
+    let goldenCandy = document.querySelector('#golden-candy'),
+        cpsMultiplier = 1; // Multiplicateur (1 par défaut, 5 pendant le boost)
 
-// 1. Apparition du Bonbon Doré
-function apparaitreBonbonDore() {
-    if (!goldenCandy) return;
+    function apparaitreBonbonDore() {
+        if (!goldenCandy) return;
 
-    let x = Math.random() * (window.innerWidth - 120);
-    let y = Math.random() * (window.innerHeight - 120);
+        let x = Math.random() * (window.innerWidth - 120);
+        let y = Math.random() * (window.innerHeight - 120);
 
-    goldenCandy.style.left = Math.max(20, x) + 'px';
-    goldenCandy.style.top = Math.max(20, y) + 'px';
-    goldenCandy.classList.remove('hidden');
+        goldenCandy.style.left = Math.max(20, x) + 'px';
+        goldenCandy.style.top = Math.max(20, y) + 'px';
+        goldenCandy.classList.remove('hidden');
 
-    // Disparaît au bout de 6 secondes si non cliqué
-    setTimeout(() => {
-        goldenCandy.classList.add('hidden');
-    }, 6000);
-}
-
-// 2. Clic sur le Bonbon Doré
-if (goldenCandy) {
-    goldenCandy.addEventListener('click', function() {
-        goldenCandy.classList.add('hidden');
-
-        // Activation du Boost x5
-        cpsMultiplier = 5;
-        
-        // Effet visuel immédiat sur le bouton principal
-        starter.style.boxShadow = "0 0 25px gold";
-        starter.style.transform = "scale(1.05)";
-
-        // Désactivation du boost après 10 secondes
         setTimeout(() => {
-            cpsMultiplier = 1;
-            starter.style.boxShadow = "none";
-            starter.style.transform = "scale(1)";
-        }, 10000);
-    });
-}
+            goldenCandy.classList.add('hidden');
+        }, 6000);
+    }
 
-// 3. Boucle d'apparition aléatoire (toutes les 45s à 90s)
-function programmerBonbonDore() {
-    let tempsAleatoire = Math.random() * (90000 - 45000) + 45000;
-    setTimeout(() => {
-        apparaitreBonbonDore();
-        programmerBonbonDore();
-    }, tempsAleatoire);
-}
-programmerBonbonDore();
+    if (goldenCandy) {
+        goldenCandy.addEventListener('click', function() {
+            goldenCandy.classList.add('hidden');
 
+            cpsMultiplier = 5;
+            
+            if (starter) {
+                starter.style.boxShadow = "0 0 25px gold";
+                starter.style.transform = "scale(1.05)";
+            }
+
+            setTimeout(() => {
+                cpsMultiplier = 1;
+                if (starter) {
+                    starter.style.boxShadow = "none";
+                    starter.style.transform = "scale(1)";
+                }
+            }, 10000);
+        });
+    }
+
+    function programmerBonbonDore() {
+        let tempsAleatoire = Math.random() * (90000 - 45000) + 45000;
+        setTimeout(() => {
+            apparaitreBonbonDore();
+            programmerBonbonDore();
+        }, tempsAleatoire);
+    }
+    programmerBonbonDore();
+
+    // Initialisation du premier affichage pour verrouiller les boutons non achetables au départ
+    maintienAffichage();
 });
