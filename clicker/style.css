@@ -1,24 +1,141 @@
-/* Bonbon Doré */
+/* --- STYLE GÉNÉRAL DU JEU --- */
+body {
+    background: linear-gradient(135deg, #2b1b36 0%, #1a1025 100%);
+    color: #fce4ec;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- COMPTEUR & EN-TÊTE --- */
+#output {
+    font-size: 1.8rem;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    border: 2px solid rgba(255, 105, 180, 0.3);
+}
+
+/* Compteur de Bonbons par Seconde */
+.cps-container {
+    font-size: 1.1rem;
+    color: #ff80bf;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* --- LE GROS BOUTON PRINCIPAL (CLIC) --- */
+#starter {
+    background: linear-gradient(145deg, #ff69b4, #ff1493);
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    padding: 30px 60px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255, 20, 147, 0.4);
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+    margin-bottom: 40px;
+    user-select: none;
+}
+
+#starter:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(255, 20, 147, 0.6);
+}
+
+#starter:active {
+    transform: scale(0.95);
+}
+
+/* --- BOUTIQUE / BÂTIMENTS --- */
+.shop-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.shop-container button {
+    background: #3d2645;
+    color: #ffffff;
+    border: 2px solid #5a3866;
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s, transform 0.2s, border-color 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Effet au survol quand on a les points */
+.shop-container button:not(:disabled):hover {
+    background: #52345d;
+    border-color: #ff69b4;
+    transform: translateX(5px);
+}
+
+/* Style des boutons désactivés (pas assez d'argent) */
+.shop-container button:disabled {
+    background: #221629;
+    color: #7a6b82;
+    border-color: #2e1f36;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* --- ANIMATION DES POP-UPS ( +1 🍬 ) --- */
+.pop-animation {
+    position: absolute;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #00ffcc;
+    pointer-events: none;
+    animation: flotterEtDisparaitre 0.8s ease-out forwards;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+@keyframes flotterEtDisparaitre {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(1.2);
+    }
+}
+
+/* --- BONBON DORÉ (ÉVÉNEMENT ALÉATOIRE) --- */
 #golden-candy {
     position: fixed;
     font-size: 3rem;
     cursor: pointer;
-    user-select: none;
-    z-index: 1000;
-    animation: pulse 1s infinite alternate, float 2s infinite ease-in-out;
+    z-index: 9999;
     filter: drop-shadow(0 0 10px gold);
-    transition: transform 0.1s ease;
+    animation: pulseOr 1s infinite alternate;
+    user-select: none;
 }
 
-#golden-candy:hover {
-    transform: scale(1.2);
+#golden-candy.hidden {
+    display: none;
 }
 
-.hidden {
-    display: none !important;
-}
-
-@keyframes pulse {
+@keyframes pulseOr {
     0% { transform: scale(1); }
-    100% { transform: scale(1.1); }
+    100% { transform: scale(1.2) rotate(10deg); }
 }
