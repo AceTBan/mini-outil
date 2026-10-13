@@ -139,3 +139,12 @@ body {
     0% { transform: scale(1); }
     100% { transform: scale(1.2) rotate(10deg); }
 }
+
+/* Transformation de la boutique en 2 colonnes bien distinctes */
+.shop-container, .shop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colonnes égales */
+    gap: 15px;
+    width: 100%;
+    max-width: 900px; /* Plus large pour accueillir les deux colonnes */
+}

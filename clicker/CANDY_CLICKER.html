@@ -28,40 +28,35 @@
     <div id="cps-display">Bonbons/sec : <span id="cps">0</span> 🍬/s</div>
     <hr>
     <h3>Boutique des Conforts</h3>
-    <button id="buy-click" disabled>Force du Clic (Niv. <span id="lvl-click">1</span>) - Coût : <span id="cost-click">25</span> 🍬</button>
-    <br><br>
-    <button id="buy-release" disabled>
-    Point au relâchement (Niv. <span id="lvl-release">0</span>) - Coût : <span id="cost-release">100</span> 🍬
-    </button>
-    <br><br>
-    <button id="buy-enter" disabled>Point à l'entrée (Niv. <span id="lvl-enter">0</span>) - Coût : <span id="cost-enter">50</span> 🍬</button>
-    <br><br>
-    <button id="buy-leave" disabled>Point à la sortie (Niv. <span id="lvl-leave">0</span>) - Coût : <span id="cost-leave">50</span> 🍬</button>    
-    <br><br>
-    <button id="buy-hold" disabled>Pression Prolongée (Niv. <span id="lvl-hold">0</span>) - Coût : <span id="cost-hold">200</span> 🍬</button>
-    <br><br>
-    <button id="buy-wheel" disabled>Action Molette (Niv. <span id="lvl-wheel">0</span>) - Coût : <span id="cost-wheel">200</span> 🍬</button>
-    <br><br>
-    <button id="buy-move" disabled>Survol Turbo (Niv. <span id="lvl-move">0</span>) - Coût : <span id="cost-move">400</span> 🍬</button>
-    <br><br>
-    <button id="buy-auto" disabled>Auto-Clicker (Niv. <span id="lvl-auto">0</span>) - Coût : <span id="cost-auto">800</span> 🍬</button>
-    <br><br>
-    <div id="golden-candy" class="hidden">🍬✨</div>
-    <button id="buy-marmite">
-    Marmite à Bonbons (Niveau <span id="lvl-marmite">0</span>) - Coût : <span id="cost-marmite">1500</span> 🍬
-    </button>
-    <button id="buy-usine">
-    Usine à Bonbons (Niveau <span id="lvl-usine">0</span>) - Coût : <span id="cost-usine">10000</span> 🍬
-    </button>
-    <button id="buy-labo">
-    Laboratoire à Bonbons (Niveau <span id="lvl-labo">0</span>) - Coût : <span id="cost-labo">75000</span> 🍬
-    </button>
-    <button id="buy-mine">
-    Mine à Bonbons (Niveau <span id="lvl-mine">0</span>) - Coût : <span id="cost-mine">500000</span> 🍬
-    </button>
-    <button id="buy-fusee">
-    Fusée Spatiale (Niveau <span id="lvl-fusee">0</span>) - Coût : <span id="cost-fusee">5000000</span> 🍬
-    </button>
+
+<div class="shop-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 950px; width: 100%;">
+    
+    <!-- Colonne de gauche : Fonctions / Améliorations de clics -->
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+        <h3 style="margin: 0 0 10px 0; color: #ff80bf; text-align: center;">Améliorations</h3>
+        <button id="buy-click"disabled>Améliorer Clic (+1 clic) (Niv. <span id="lvl-click">1</span>) - Coût : <span id="cost-click">25</span> 🍬</button>
+        <button id="buy-release" disabled>Point au relâchement (Niv. <span id="lvl-release">0</span>) - Coût : <span id="cost-release">100</span> 🍬</button>
+        <button id="buy-enter" disabled>Point à l'entrée (Niv. <span id="lvl-enter">0</span>) - Coût : <span id="cost-enter">50</span> 🍬</button>
+        <button id="buy-leave" disabled>Point à la sortie (Niv. <span id="lvl-leave">0</span>) - Coût : <span id="cost-leave">50</span> 🍬</button>
+        <button id="buy-hold" disabled>Pression Prolongée (Niv. <span id="lvl-hold">0</span>) - Coût : <span id="cost-hold">200</span> 🍬</button>
+        <button id="buy-wheel" disabled>Action Molette (Niv. <span id="lvl-wheel">0</span>) - Coût : <span id="cost-wheel">200</span> 🍬</button>
+        <button id="buy-move" disabled>Survol Turbo (Niv. <span id="lvl-move">0</span>) - Coût : <span id="cost-move">400</span> 🍬</button>
+        
+    </div>
+
+    <!-- Colonne de droite : Bâtiments passifs -->
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+        <h3 style="margin: 0 0 10px 0; color: #ff80bf; text-align: center;">Bâtiments</h3>
+        <button id="buy-auto" disabled>Auto-Clicker (Niv. <span id="lvl-auto">0</span>) - Coût : <span id="cost-auto">800</span> 🍬</button>
+        <button id="buy-marmite" disabled>Marmite à Bonbons (Niveau <span id="lvl-marmite">0</span>) - Coût : <span id="cost-marmite">1500</span> 🍬</button>
+        <button id="buy-usine" disabled>Usine à Bonbons (Niveau <span id="lvl-usine">0</span>) - Coût : <span id="cost-usine">10000</span> 🍬</button>
+        <button id="buy-labo" disabled>Laboratoire à Bonbons (Niveau <span id="lvl-labo">0</span>) - Coût : <span id="cost-labo">75000</span> 🍬</button>
+        <button id="buy-mine" disabled>Mine à Bonbons (Niveau <span id="lvl-mine">0</span>) - Coût : <span id="cost-mine">500000</span> 🍬</button>
+        <button id="buy-fusee" disabled>Fusée Spatiale (Niveau <span id="lvl-fusee">0</span>) - Coût : <span id="cost-fusee">5000000</span> 🍬</button>
+    </div>
+
+</div>
+
     <script src="CANDY_CLICKER.js"></script>
 </body>
 </html>
