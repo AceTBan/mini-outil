@@ -48,7 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
         mineLvl = 0,
         mineCost = 500000,
         fuseeLvl = 0,
-        fuseeCost = 5000000;
+        fuseeCost = 5000000,
+        autoDoreLvl = 0,
+        autoDoreCost = 25000,
+        buyAutoDoreBtn = document.querySelector('#buy-auto-doré');
 
     // 3. Fonction pour ajouter des bonbons + animation
     function ajouterBonbons(quantite) {
@@ -176,6 +179,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('lvl-fusee').innerText = fuseeLvl;
             document.getElementById('cost-fusee').innerText = fuseeCost.toLocaleString('de-DE');
         }
+
+        // Auto-Doré
+        if (buyAutoDoreBtn) buyAutoDoreBtn.disabled = candyCounter < autoDoreCost;
+        if (document.getElementById('lvl-auto-doré')) {
+            document.getElementById('lvl-auto-doré').innerText = autoDoreLvl;
+            document.getElementById('cost-auto-doré').innerText = autoDoreCost.toLocaleString('de-DE');
+        }
+
     }
 
     // Stop le timer du clic maintenu
@@ -388,6 +399,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    if (buyAutoDoreBtn) {
+        buyAutoDoreBtn.addEventListener('click', function() {
+            if (candyCounter >= autoDoreCost) {
+                candyCounter -= autoDoreCost;
+                autoDoreLvl++;
+                autoDoreCost = Math.floor(autoDoreCost * 2);
+                maintienAffichage();
+            }
+        });
+    }
+    
     // Calcul du nombre de bonbons par seconde (CPS)
     setInterval(function() {
         let bonbonsGagnes = candyCounter - derniersBonbons;
@@ -409,6 +431,17 @@ document.addEventListener('DOMContentLoaded', function () {
         goldenCandy.style.top = Math.max(20, y) + 'px';
         goldenCandy.classList.remove('hidden');
 
+        // 🤖 AUTO-CLIC SI ACHETÉ
+        if (autoDoreLvl > 0) {
+            // Petit délai réaliste de 300ms avant qu'il ne "clique" tout seul dessus
+            setTimeout(() => {
+                if (!goldenCandy.classList.contains('hidden')) {
+                    goldenCandy.click(); // Simule le clic sur le bonbon doré
+                }
+            }, 300);
+        }
+
+        // Disparaît au bout de 6 secondes si non cliqué
         setTimeout(() => {
             goldenCandy.classList.add('hidden');
         }, 6000);
