@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fuseeLvl = 0,
         fuseeCost = 5000000,
         autoDoreLvl = 0,
-        autoDoreCost = 25000,
+        autoDoreCost = 10000000,
         buyAutoDoreBtn = document.querySelector('#buy-auto-doré');
 
     // 3. Fonction pour ajouter des bonbons + animation
@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (candyCounter >= autoDoreCost) {
                 candyCounter -= autoDoreCost;
                 autoDoreLvl++;
-                autoDoreCost = Math.floor(autoDoreCost * 2);
+                autoDoreCost = Math.floor(autoDoreCost * 10);
                 maintienAffichage();
             }
         });
@@ -451,13 +451,17 @@ document.addEventListener('DOMContentLoaded', function () {
         goldenCandy.addEventListener('click', function() {
             goldenCandy.classList.add('hidden');
 
-            cpsMultiplier = 5;
+            // 🚀 Le multiplicateur augmente avec le niveau ! 
+            // Niveau 1 = x5, Niveau 2 = x7, Niveau 3 = x9, etc. (ou comme on veut)
+            cpsMultiplier = 3 + (autoDoreLvl * 2); 
             
+            // Effet visuel immédiat sur le bouton principal
             if (starter) {
                 starter.style.boxShadow = "0 0 25px gold";
                 starter.style.transform = "scale(1.05)";
             }
 
+            // Désactivation du boost après 10 secondes
             setTimeout(() => {
                 cpsMultiplier = 1;
                 if (starter) {
